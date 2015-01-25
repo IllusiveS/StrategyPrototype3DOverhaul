@@ -5,14 +5,14 @@ public class CombatInitiator : MonoBehaviour {
 
 	public GameObject Combat;
 
-	public IArmy army;
+	public Army army;
 
 	public void Start()
 	{
 		army = GetComponent<UArmy>().army;
 	}
 
-	public void pressTheAttack(IArmy def)
+	public void pressTheAttack(Army def)
 	{
 		GameObject goCombat = Instantiate(Combat) as GameObject;
 		goCombat.transform.parent = Camera.main.transform;

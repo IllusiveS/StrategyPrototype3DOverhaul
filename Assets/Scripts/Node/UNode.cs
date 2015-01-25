@@ -22,6 +22,8 @@ public class UNode : MonoBehaviour {
 
 	public int moveLeft;
 
+	private MovementStatus movementStatus;
+
 
 	void Awake()
 	{
@@ -30,6 +32,8 @@ public class UNode : MonoBehaviour {
 	}
 
 	void Start () {
+		movementStatus = GetComponentInChildren<MovementStatus> ();
+
 		node.iCost = cost;
 
 		for(int i = 0; i < neigh.GetLength(0); i++) 
@@ -49,7 +53,7 @@ public class UNode : MonoBehaviour {
 
 			}
 		}
-		List<INode> nods = new List<INode> ();
+		List<Node> nods = new List<Node> ();
 		foreach (UNode nod in neighbours) 
 		{
 			nods.Add(nod.node);
@@ -59,7 +63,12 @@ public class UNode : MonoBehaviour {
 
 		try
 		{
+            Vector3 vek = new Vector3(transform.position.x, 1.0f, transform.position.z);
             army = Physics.RaycastAll(transform.position, new Vector3(0, 1.0f, 0), 1.0f, 1 << 9)[0].collider.gameObject.GetComponent<UArmy>();
+            Vector3 change = new Vector3(transform.position.x, army.transform.position.y, transform.position.z);
+            army.transform.position = change;
+            army.army.setNode(node);
+            army.node = this;
 			node.army = army.army;
 		}
 		catch (System.IndexOutOfRangeException)
@@ -70,42 +79,32 @@ public class UNode : MonoBehaviour {
 
 	void Update()
 	{
-		try
-		{
-			army = node.army.getUArmy ();
-		}
-		catch(System.NullReferenceException)
-		{
-			army = null;
-		}
-
 		moveLeft = node.iMoveLeft;
 	}
 
-	public void setActive(bool b)
+	public void setActive(Node.Status status)
 	{
-		GetComponentInChildren<UIsActive>().setActive(b);
+        switch (status)
+        {
+            case Node.Status.ATTACKABLE:
+                movementStatus.setAttack();
+                break;
+            case Node.Status.ENTERABLE:
+                movementStatus.setMovement();
+                break;
+            case Node.Status.PASSABLE: 
+                movementStatus.setMovement();
+                break;
+            case Node.Status.NOTHING:
+                movementStatus.reset();
+                break;
+        }
 	}
 
-	INodeCost getTileType()
+	NodeCost getTileType()
 	{
-		INodeCost costCalc = null;
+		NodeCost costCalc = null;
 
-		switch(tileType)
-		{
-		case TileType.city:
-			costCalc = new NodeCityCost();
-			break;
-		case TileType.plain:
-			costCalc = new NodePlainsCost();
-			break;
-		case TileType.road:
-			costCalc = new NodeRoadCost();
-			break;
-		case TileType.forest:
-			costCalc = new NodeForestCost();
-			break;
-		}
 		return costCalc;
 	}
 

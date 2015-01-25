@@ -1,8 +1,8 @@
 using System;
 
-public class NodeRoadCost : INodeCost
+public class NodeRoadCost
 {
-	public int getCost(IAlgorithmCostInterface alg)
+	public int getCost(AlgorithmCostInterface alg)
 	{
 		try
 		{

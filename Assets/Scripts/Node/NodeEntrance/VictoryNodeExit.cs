@@ -2,7 +2,7 @@ using System;
 
 public class VictoryNodeExit : NodeExit
 {
-	public override void Leave(INode node, IArmy army)
+	public override void Leave(Node node, Army army)
 	{
 		base.Leave (node, army);
 	}

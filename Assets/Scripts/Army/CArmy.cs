@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CArmy : MonoBehaviour {
 
-	public IArmy army;
+	public Army army;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +12,8 @@ public class CArmy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(Input.GetMouseButtonDown(1))
+			army.selectArmy(null);
 	}
 
 	void OnMouseDown()
@@ -35,12 +36,10 @@ public class CArmy : MonoBehaviour {
 		}
 		if(Army.selected == army)
 		{
-			Army.selected.selectArmy(null);
-			return;
+
 		}
 
 		army.selectArmy (army);
 		return;
-
 	}
 }

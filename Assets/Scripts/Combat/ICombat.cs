@@ -2,9 +2,9 @@ public interface ICombat
 {
 	ICombat getInstance();
 
-	void setUp(UCombat unity, IArmy atk, IArmy def);
+	void setUp(UCombat unity, Army atk, Army def);
 
-	IArmy CalculateWinner();
-	void BeginCombat(IArmy atk, IArmy def);
+	Army CalculateWinner();
+	void BeginCombat(Army atk, Army def);
 	void EndCombat();
 }

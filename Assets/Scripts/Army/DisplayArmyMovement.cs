@@ -6,7 +6,7 @@ public class DisplayArmyMovement : MonoBehaviour {
 
 	private class MovementLeftList : List<MovementLeftDisplay> {}
 
-	public IArmy army;
+	public Army army;
 
 	MovementLeftList lista = new MovementLeftList();
 

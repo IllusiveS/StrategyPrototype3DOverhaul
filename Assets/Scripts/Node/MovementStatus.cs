@@ -16,11 +16,13 @@ public class MovementStatus : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 
 	public void setMovement()
 	{
+		if(renderer.sprite == endMovement)
+			return;
 		renderer.enabled = true;
 		renderer.sprite = movement;
 	}

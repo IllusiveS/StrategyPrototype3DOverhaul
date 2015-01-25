@@ -2,9 +2,9 @@ using System;
 
 public class NodeEntrance
 {
-	public virtual int Enter(INode node, IArmy army)
+	public virtual int Enter(Node node, Army army)
 	{
-		army.setSpeed (army.getSpeed () - node.getCost(army.getAlgorithm()));
+		army.setSpeed (army.getSpeed () - node.getCost());
 		
 		if (node.getArmy() == null)
 		{

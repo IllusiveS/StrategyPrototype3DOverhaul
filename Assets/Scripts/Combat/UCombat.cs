@@ -47,7 +47,7 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 		numberOfUnits = units.Count;
 	}
 
-	public void setUpCombat(IArmy atk, IArmy def)
+	public void setUpCombat(Army atk, Army def)
 	{
 		Combat com = new Combat ();
 		combat = com;

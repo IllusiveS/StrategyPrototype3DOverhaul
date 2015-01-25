@@ -8,7 +8,7 @@ public class ArmyMovement : MonoBehaviour {
 
 	UNodeList trasa = new UNodeList ();
 
-	IArmy movingArmy;
+	Army movingArmy;
 
 	public Vector3 start;
 	public Vector3 end;
@@ -31,7 +31,7 @@ public class ArmyMovement : MonoBehaviour {
 	{
 		moving = true;
 		trasa.AddRange (route);
-		trasa.RemoveAt (0);
+        setNewTarget();
 		progress = 2.0f;
 	}
 		
@@ -44,51 +44,37 @@ public class ArmyMovement : MonoBehaviour {
 
 	void Move()
 	{
-		if(progress > 1.0f)
-		{
-			setNewTarget ();
-		}
+        Vector3 vek = end - start;
+        vek.Normalize();
+        vek *= 0.05f;
+        GetComponent<CharacterController>().Move(vek);
 
-		transform.position = Vector3.Lerp (start, end, progress);
-		progress += 0.02f;
+
+        if(Vector3.Distance(end, transform.position) < 0.1f)
+        {
+            Vector3 change = new Vector3(end.x, transform.position.y, end.z);
+            transform.position = change;
+            setNewTarget();
+        }
 	}
 
 	void setNewTarget()
 	{
-		try
-		{
-			startNode.node.Leave(movingArmy);
-			endNode.node.Enter(movingArmy);
-			movingArmy.setNode(endNode.node);
-		}
-		catch (System.NullReferenceException)
-		{
-			
-		}
-
 		start = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 		startNode = movingArmy.getNode ().node;
 		try
 		{
-			end = new Vector3 (trasa[0].transform.position.x, trasa[0].transform.position.y, -0.5f);
+            end = new Vector3(trasa[0].transform.position.x, transform.position.y, trasa[0].transform.position.z);
 			endNode = trasa[0];
 			trasa.RemoveAt (0);
-			if(trasa.Count != 0)
-			{
-
-			}
 		}catch (System.ArgumentOutOfRangeException)
 		{
-			moving = false;
-			if(endNode.node.getArmy() != null && endNode.node.getArmy() != movingArmy)
-				finishAttackMove();
-			else
-			{
-				finishMove();
-			}
+			finishMove();
+			return;
 		}
-
-		progress = 0.0f;
+		endNode.node.Enter(movingArmy);
+		startNode.node.Leave(movingArmy);
+		movingArmy.setNode(endNode.node);
 	}
 
 	void finishMove()
@@ -100,7 +86,7 @@ public class ArmyMovement : MonoBehaviour {
 
 		Army.selected = null;
 
-		ListUnits.getInstance().displayArmy(null);
+
 	}
 	void finishAttackMove()
 	{

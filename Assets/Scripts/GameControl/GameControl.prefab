@@ -41,6 +41,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTurn: 0
+  gameTurn: 0
   iPlayers: 2
 --- !u!114 &11400002
 MonoBehaviour:

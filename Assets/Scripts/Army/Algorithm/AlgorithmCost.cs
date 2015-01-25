@@ -1,6 +1,6 @@
 using System;
 
-public class AlgorithmCost : IAlgorithmCost
+public class AlgorithmCost 
 {
 	int cost;
 

@@ -4,144 +4,198 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class Node : INode{
+public class Node
+{
 
-	public UNode node;
+    public UNode node;
 
-	public NodeEntrance entrance;
-	public NodeExit exit;
+    public NodeEntrance entrance;
+    public NodeExit exit;
 
-	public IArmy army;
+    public Army army = null;
 
-	public int NeighboursNumber;
+    public int NeighboursNumber;
 
-	public static INode Selected;
+    public static Node Selected;
 
-	public bool bWasVisited;
-	public bool bIsActivated;
+    public bool bWasVisited;
+    public bool bIsActivated;
 
-	public int iCost;
-	public int iMoveLeft;
+    public int iCost;
+    public int iMoveLeft;
 
-	public List<INode> Neighbours;
+    public List<Node> Neighbours;
 
-	public INode prevNode;
+    public Node prevNode;
 
-	public INodeCost costCalculator;
-	
-	public Node(UNode node)
-	{
-		AllTheNodes.AccessAllNodeList ().Add (this);
-		this.node = node;
+    public NodeCost costCalculator;
 
-		entrance = new NodeEntrance ();
-		exit = new NodeExit ();
-	}
+    public Status nodeStatus;
 
-	public void SelectNode(INode selected, IAlgorithm algorytm)
-	{
-		if(selected.getActive())
-		{
-			DestinateNode(selected, algorytm);
-			return;
-		}
-		Node.Selected = selected;
-		algorytm.GenerateGrid (this, 3);
-	}
+    public enum Status
+    {
+        ATTACKABLE,
+        PASSABLE,
+        ENTERABLE,
+        NOTHING
+    }
 
-	public void DestinateNode(INode selected, IAlgorithm algorytm)
-	{
-		List<UNode> trasa = algorytm.GenerateRoute (Selected, selected);
+    public Node(UNode node)
+    {
+        AllTheNodes.AccessAllNodeList().Add(this);
+        this.node = node;
 
-		foreach(INode nod in AllTheNodes.AccessAllNodeList())
-		{
-			nod.setActive(false);
-		}
-		foreach(UNode nod in trasa)
-		{
-			nod.setActive(true);
-		}
-	}
+        entrance = new NodeEntrance();
+        exit = new NodeExit();
+    }
 
-	public void Enter(IArmy army)
-	{
-		entrance.Enter (this, army);
-	}
-	public void Leave(IArmy army)
-	{
-		exit.Leave (this, army);
-	}
+    public void SelectNode(Node selected, Algorithm algorytm)
+    {
+        if (selected.getActive())
+        {
+            DestinateNode(selected, algorytm);
+            return;
+        }
+        Node.Selected = selected;
+        algorytm.GenerateGrid(this, 3);
+    }
 
-	public IArmy getArmy()
-	{
-		return army;
-	}
-	public int getCost(IAlgorithmCostInterface alg){
-		int i = costCalculator.getCost(alg);
-		if (i == -1)
-			return iCost;
-		else
-			return i;
-	}
-	public INode getPrev(){
-		return prevNode;
-	}
-	public List<INode> getNeighbours(){
-		return Neighbours;
-	}
-	public bool getVisited(){
-		return bWasVisited;
-	}
-	public bool getActive(){
-		return bIsActivated;
-	}
-	public int getMoveLeft()
-	{
-		return iMoveLeft;
-	}
-	public UNode getUnityNode()
-	{
-		return node;
-	}
+    public void DestinateNode(Node selected, Algorithm algorytm)
+    {
+        List<UNode> trasa = algorytm.GenerateRoute(Selected, selected);
 
-	public void setUnityNode(UNode n)
-	{
-		node = n;
-	}
+        foreach (Node nod in AllTheNodes.AccessAllNodeList())
+        {
+            nod.setActive(Status.NOTHING);
+        }
+        foreach (UNode nod in trasa)
+        {
+            nod.setActive(Status.ENTERABLE);
+        }
+    }
 
-	public void setCost(int i)
-	{
-		iCost = i;
-	}
-	public void setPrev(INode node)
-	{
-		prevNode = node;
-	}
-	public void setNeighbours(List<INode> list)
-	{
-		Neighbours = list;
-		NeighboursNumber = list.Count;
-	}
-	public void setVisited(bool b)
-	{
-		bWasVisited = b;
-	}
-	public void setActive(bool b)
-	{
-		node.setActive (b);
-		bIsActivated = b;
-	}
-	public void setMoveLeft(int i)
-	{
-		iMoveLeft = i;
-	}
-	public void setArmy(IArmy army)
+    public void Enter(Army army)
+    {
+        entrance.Enter(this, army);
+    }
+    public void Leave(Army army)
+    {
+        exit.Leave(this, army);
+    }
+
+    public Army getArmy()
+    {
+        return army;
+    }
+    public int getCost()
+    {
+        return iCost;
+    }
+    public Node getPrev()
+    {
+        return prevNode;
+    }
+    public List<Node> getNeighbours()
+    {
+        return Neighbours;
+    }
+    public bool getVisited()
+    {
+        return bWasVisited;
+    }
+    public bool getActive()
+    {
+        return bIsActivated;
+    }
+    public int getMoveLeft()
+    {
+        return iMoveLeft;
+    }
+    public UNode getUnityNode()
+    {
+        return node;
+    }
+
+    public void setUnityNode(UNode n)
+    {
+        node = n;
+    }
+
+    public void setCost(int i)
+    {
+        iCost = i;
+    }
+    public void setPrev(Node node)
+    {
+        prevNode = node;
+    }
+    public void setNeighbours(List<Node> list)
+    {
+        Neighbours = list;
+        NeighboursNumber = list.Count;
+    }
+    public void setVisited(bool b)
+    {
+        bWasVisited = b;
+    }
+    public void setActive(Status status)
+    {
+        node.setActive(status);
+        this.nodeStatus = status;
+    }
+    public void setMoveLeft(int i)
+    {
+        iMoveLeft = i;
+    }
+    public void setArmy(Army army)
 	{
 		this.army = army;
+
+		if(army == null)
+			getUnityNode().army = null;
+		else
+		{
+			army.setNode(this);
+			getUnityNode().army = army.uArmy;
+		}
+
+        
 	}
 
-	public bool isReachable()
-	{
-		return bIsActivated;
-	}
+    public bool isReachable()
+    {
+        return bIsActivated;
+    }
+    public bool IsAttackable(Algorithm alg, Node prev)
+    {
+        if (getArmy() != null)
+        {
+            if (getArmy().getPlayer() != alg.armyOwner.getPlayer() && prev.bIsActivated)
+            {
+                if (alg.armyOwner.getCanAttack())
+                    return true;
+                else
+                    return false;
+            }
+        }
+        return false;
+    }
+    public bool IsPassable(Algorithm alg, Node prev)
+    {
+        if (getArmy() != null)
+        {
+            if (getArmy().getPlayer() == alg.armyOwner.getPlayer())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool IsEnterable(Algorithm alg, Node prev)
+    {
+        if (getUnityNode().army == null)
+            return true;
+        else
+            return false;
+    }
 }

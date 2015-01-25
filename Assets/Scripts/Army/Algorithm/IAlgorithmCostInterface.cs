@@ -1,16 +1,16 @@
 using System;
 
-public interface IAlgorithmCostInterface
+public interface AlgorithmCostInterface
 {
 	int getRoadCost();
 	int getPlainsCost();
 	int getForestCost();
 	int getCityCost();
 
-	void setRoadCost(IAlgorithmCost cost);
-	void setPlainsCost(IAlgorithmCost cost);
-	void setForestCost(IAlgorithmCost cost);
-	void setCityCost(IAlgorithmCost cost);
+	void setRoadCost(AlgorithmCost cost);
+	void setPlainsCost(AlgorithmCost cost);
+	void setForestCost(AlgorithmCost cost);
+	void setCityCost(AlgorithmCost cost);
 }
 
 

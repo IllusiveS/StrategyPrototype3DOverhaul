@@ -3,9 +3,9 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class Army : IArmy, ITurnObserver, IUnitContainer, IOwnable
+public class Army : ITurnObserver, IUnitContainer, IOwnable
 {
-	public static IArmy selected = null;
+	public static Army selected = null;
 
 	public UArmy uArmy;
 
@@ -21,7 +21,7 @@ public class Army : IArmy, ITurnObserver, IUnitContainer, IOwnable
 
 	Node currentNode;
 
-	public IAlgorithm movingAlgorithm;
+	public Algorithm movingAlgorithm;
 
 	public Army (int i, int speed, UArmy arm)
 	{
@@ -66,7 +66,7 @@ public class Army : IArmy, ITurnObserver, IUnitContainer, IOwnable
 		}
 	}
 
-	public void selectArmy(IArmy army)
+	public void selectArmy(Army army)
 	{
 		try
 		{
@@ -79,21 +79,21 @@ public class Army : IArmy, ITurnObserver, IUnitContainer, IOwnable
 		if(army != null && isItsTurn)
 		{
 			selected = army;
-			movingAlgorithm.GenerateGrid (currentNode, iMove);
+			movingAlgorithm.GenerateGrid (army.currentNode, army.iMove);
 			setIsActive(true);
-			ListUnits.getInstance().displayArmy(this.getUArmy());
+			//TODO unit display
 		}
 		else
 		{
 			selected = null;
-			ListUnits.getInstance().displayArmy(null);
+			//TODO unit display
 			setIsActive(false);
 			movingAlgorithm.ResetAllNodes();
 		}
 
 	}
 
-	public void attackArmy(IArmy def)
+	public void attackArmy(Army def)
 	{
 		List<UNode> trasa = Army.selected.getAlgorithm ().GenerateRoute (getNode (), def.getNode ());
 		Army.selected.getUArmy().GetComponent<ArmyMovement>().setRoute(trasa);
@@ -106,7 +106,11 @@ public class Army : IArmy, ITurnObserver, IUnitContainer, IOwnable
 	public void setNode(Node node)
 	{
 		currentNode = node;
-
+        try {
+			uArmy.node = node.getUnityNode ();
+		} catch (System.NullReferenceException) {
+			uArmy.node = null;
+		}
 	}
 
 	public bool getIsActive()
@@ -146,7 +150,7 @@ public class Army : IArmy, ITurnObserver, IUnitContainer, IOwnable
 		isItsTurn = boolean;
 	}
 
-	public IAlgorithm getAlgorithm()
+	public Algorithm getAlgorithm()
 	{
 		return movingAlgorithm;
 	}

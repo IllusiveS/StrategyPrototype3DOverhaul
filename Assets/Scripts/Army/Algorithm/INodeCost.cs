@@ -1,7 +1,7 @@
 using System;
 
-public interface INodeCost
+public interface NodeCost
 {
-	int getCost(IAlgorithmCostInterface alg);
+	int getCost(AlgorithmCost alg);
 }
 

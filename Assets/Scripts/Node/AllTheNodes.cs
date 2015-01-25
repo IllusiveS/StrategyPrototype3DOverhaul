@@ -8,13 +8,13 @@ public class AllTheNodes
 
 	AllTheNodes()
 	{
-		allTheNodes = new List<INode>();
+		allTheNodes = new List<Node>();
 		allTheNodes.Clear ();
 	}
 
-	List<INode> allTheNodes;
+	List<Node> allTheNodes;
 
-	public static List<INode> AccessAllNodeList()
+	public static List<Node> AccessAllNodeList()
 	{
 		if (Singleton == null) 
 		{

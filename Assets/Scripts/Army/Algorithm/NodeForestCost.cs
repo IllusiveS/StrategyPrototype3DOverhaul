@@ -1,8 +1,8 @@
 using System;
 
-public class NodeForestCost : INodeCost
+public class NodeForestCost
 {
-	public int getCost(IAlgorithmCostInterface alg)
+	public int getCost(AlgorithmCostInterface alg)
 	{
 		try
 		{

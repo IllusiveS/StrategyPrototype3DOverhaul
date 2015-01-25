@@ -44,11 +44,11 @@ public class GameControl : MonoBehaviour, ITurnSubject {
 	}
 
 	public int iTurn = 0;
-	private int gameTurn = 1;
+	public int gameTurn = 1;
 	public int iPlayers;
 
 	public List<ITurnObserver> players = new List<ITurnObserver> ();
-	
+
 	//Przycisk tury
 	void OnGUI() {
 		if(!started)

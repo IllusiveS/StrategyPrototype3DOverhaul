@@ -24,7 +24,7 @@ public class UArmy : MonoBehaviour {
 
 		try
 		{
-			node = Physics.OverlapSphere (new Vector3(transform.position.x, transform.position.y, transform.position.z + 0.5f), 0.2f, 1 << 8) [0].GetComponent<UNode> ();
+			node = Physics.RaycastAll(transform.position, new Vector3(0, -1.0f, 0), 1.0f, 1 << 8)[0].collider.gameObject.GetComponent<UNode>();
 			army.setNode (node.node);
 		}
 		catch (System.IndexOutOfRangeException)
@@ -43,7 +43,7 @@ public class UArmy : MonoBehaviour {
 
 	public void UpdateMovementDisplay()
 	{
-		GetComponentInChildren<DisplayArmyMovement> ().DisplayMovement ();
+
 	}
 
 	// Update is called once per frame

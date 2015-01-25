@@ -22,25 +22,25 @@ public class Combat : ICombat, ICombatSituation{
 
 	UCombat unityModule;
 
-	IArmy atk;
-	IArmy def;
+	Army atk;
+	Army def;
 
 	public Combat ()
 	{
 		instance = this;
 	}
-	public void setUp(UCombat unity, IArmy atk, IArmy def)
+	public void setUp(UCombat unity, Army atk, Army def)
 	{
 		unityModule = unity;
 		this.atk = atk;
 		this.def = def;
 	}
 
-	public IArmy CalculateWinner()
+	public Army CalculateWinner()
 	{
 		return null;
 	}
-	public void BeginCombat(IArmy atk, IArmy def)
+	public void BeginCombat(Army atk, Army def)
 	{
 
 	}
@@ -57,7 +57,7 @@ public class Combat : ICombat, ICombatSituation{
 	{
 		bool empty = true;
 
-		IArmy army;
+		Army army;
 
 		if(i == atk.getPlayer())
 		{
@@ -86,7 +86,7 @@ public class Combat : ICombat, ICombatSituation{
 	{
 		Unit unit = null;
 
-		IArmy army;
+		Army army;
 
 		if (player == this.atk.getPlayer ()) 
 		{
