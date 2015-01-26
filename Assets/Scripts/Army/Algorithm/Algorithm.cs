@@ -97,6 +97,7 @@ public class Algorithm{
 
 	public Node TryNode(Node start, Node end, int i)
 	{
+        if (end == null) { return null; }
         if (end.IsAttackable(this, start) && testViability(start, end, i))
         {
             end.setPrev(start);
@@ -170,8 +171,16 @@ public class Algorithm{
 	public void IterateNodes(List<Node> nodes)
 	{
 		do {
-			foreach (Node NodeNeigh in nodes[0].getNeighbours()) 
+			List<Node> neighs = nodes[0].getNeighbours();
+			for(int i = 0; i < 4; i++)
 			{
+				Node NodeNeigh;
+				try {
+					NodeNeigh = neighs[i];
+				} catch (System.NullReferenceException) {
+					continue;
+				}
+				if(NodeNeigh == null) {continue;}
 				Node next = TryNode (nodes[0], NodeNeigh, nodes[0].getMoveLeft ());
 				if (next != null) 
 				{

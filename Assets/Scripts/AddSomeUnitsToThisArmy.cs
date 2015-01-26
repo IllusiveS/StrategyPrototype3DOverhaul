@@ -9,10 +9,10 @@ public class AddSomeUnitsToThisArmy : MonoBehaviour {
 		UArmy armyToAdd = GetComponentInChildren<UArmy> ();
 		foreach(UUnit un in GetComponentsInChildren<UUnit>())
 		{
-			armyToAdd.army.addUnit(un.unit);
+			armyToAdd.army.addUnit(un.unit);   
 		}
 	}
-	
+	  
 	// Update is called once per frame
 	void Update () {
 	

@@ -10,8 +10,6 @@ public class UNode : MonoBehaviour {
 
 	public List<UNode> neighbours = new List<UNode>();
 
-	private int[,] neigh = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
 	public Node node;
 
 	public int AllNodes;
@@ -36,27 +34,38 @@ public class UNode : MonoBehaviour {
 
 		node.iCost = cost;
 
-		for(int i = 0; i < neigh.GetLength(0); i++) 
+		for(int i = 0; i < 4; i++) 
 		{
 			Transform trans = GetComponent<Transform>();
-            Vector3 start = new Vector3(trans.position.x + (halfSize * neigh[i, 0]), trans.position.y, trans.position.z + (halfSize * neigh[i, 1]));
+
+            float Xcoord = Mathf.Cos(i * 90 * Mathf.Deg2Rad);
+            float YCoord = Mathf.Sin(i * 90 * Mathf.Deg2Rad);
+
+            Vector3 start = new Vector3(trans.position.x + (halfSize * Xcoord), trans.position.y, trans.position.z + (halfSize * YCoord));
 
 			int terrainLayer = 1 << 8;
 
 			try
 			{
-				UNode PotentialNeighbour = Physics.OverlapSphere(start, 0.3f, terrainLayer)[0].GetComponent<UNode>();
+				UNode PotentialNeighbour = Physics.OverlapSphere(start, 0.2f, terrainLayer)[0].GetComponent<UNode>();
 				neighbours.Add(PotentialNeighbour);
 			}
-			catch
+			catch (System.IndexOutOfRangeException)
 			{
-
+                neighbours.Add(null);
 			}
 		}
 		List<Node> nods = new List<Node> ();
 		foreach (UNode nod in neighbours) 
 		{
-			nods.Add(nod.node);
+            try
+            {
+                nods.Add(nod.node);
+            }
+            catch (System.NullReferenceException)
+            {
+                nods.Add(null);
+            }
 		}
 		
 		node.setNeighbours (nods);

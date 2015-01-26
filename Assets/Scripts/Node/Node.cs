@@ -123,7 +123,7 @@ public class Node
 
     public void setCost(int i)
     {
-        iCost = i;
+        iCost = i;  
     }
     public void setPrev(Node node)
     {
@@ -140,7 +140,13 @@ public class Node
     }
     public void setActive(Status status)
     {
-        node.setActive(status);
+        try
+        {
+            node.setActive(status);
+        }
+        catch (System.Exception)
+        {
+        }
         this.nodeStatus = status;
     }
     public void setMoveLeft(int i)
@@ -193,9 +199,16 @@ public class Node
     }
     public bool IsEnterable(Algorithm alg, Node prev)
     {
-        if (getUnityNode().army == null)
-            return true;
-        else
+        try
+        {
+            if (getUnityNode().army == null)
+                return true;
+            else
+                return false;
+        }
+        catch (System.NullReferenceException)
+        {
             return false;
+        }
     }
 }
