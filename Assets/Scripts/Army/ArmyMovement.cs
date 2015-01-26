@@ -83,10 +83,9 @@ public class ArmyMovement : MonoBehaviour {
 		GetComponent<UArmy> ().army.getAlgorithm ().ResetAllNodes ();
 		endNode = null;
 		startNode = null;
-
+		moving = false;
+		//Army.selected.selectArmy (null);
 		Army.selected = null;
-
-
 	}
 	void finishAttackMove()
 	{

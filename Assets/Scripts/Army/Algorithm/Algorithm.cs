@@ -143,16 +143,17 @@ public class Algorithm{
 			trasa.Add(testedNode.getUnityNode());
 			testedNode = testedNode.getPrev();
 		}while (testedNode != null);
-        //trasa.RemoveAt(0);
 		trasa.Reverse ();
+		trasa.RemoveAt(0);
 		return trasa;
 
 	}
 
 	public void ResetAllNodes()
 	{
-		foreach (Node node in AllTheNodes.AccessAllNodeList()) 
+		foreach(GameObject obj in GameObject.FindGameObjectsWithTag("Terrain"))
 		{
+			Node node = obj.GetComponent<UNode>().node;
 			node.setActive(Node.Status.NOTHING);
 			node.setVisited(false);
 			node.setPrev(null);

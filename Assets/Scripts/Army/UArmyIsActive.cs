@@ -28,44 +28,5 @@ public class UArmyIsActive : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		isActive = army.getIsActive ();
-
-		if(isActive)
-		{
-			transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
-		}
-		else
-		{
-			transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-		}
-	}
-
-	void move()
-	{
-		t += Time.deltaTime;
-		if(directionDown)
-		{
-			moveDown(t);
-		}
-		else
-		{
-			moveUp (t);
-		}
-
-		if (t > 1.0f)
-		{
-			t = 0.0f;
-			if(directionDown)
-				directionDown = false;
-			else
-				directionDown = true;
-		}
-	}
-	void moveDown(float t)
-	{
-		Vector3.Lerp(down, up, t);
-	}
-	void moveUp(float t)
-	{
-		Vector3.Lerp(up, down, t);
 	}
 }

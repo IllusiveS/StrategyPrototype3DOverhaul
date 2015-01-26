@@ -12,7 +12,7 @@ public class CNode : MonoBehaviour {
 	
 	void OnMouseDown()
 	{
-		if(Army.selected != null && node.nodeStatus == Node.Status.ENTERABLE)
+		if(Army.selected != null && node.nodeStatus == Node.Status.ENTERABLE && Army.selected != node.army)
 		{
 			List<UNode> trasa = Army.selected.getAlgorithm().GenerateRoute(null, node);
 			Army.selected.getUArmy().GetComponent<ArmyMovement>().setRoute(trasa);

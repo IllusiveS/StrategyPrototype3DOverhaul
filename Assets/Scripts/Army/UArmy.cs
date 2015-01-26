@@ -8,7 +8,6 @@ public class UArmy : MonoBehaviour {
 	public int iPlayer;
 	public int iSpeed;
 
-	[System.NonSerialized]
 	public UNode node;
 
 	void Awake()
@@ -48,7 +47,7 @@ public class UArmy : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+		iSpeed = army.getSpeed ();
 	}
 
 	void OnDestroy()

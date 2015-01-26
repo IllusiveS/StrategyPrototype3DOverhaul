@@ -9,7 +9,8 @@ public class NodeEntrance
 		if (node.getArmy() == null)
 		{
 			node.setArmy(army);
-			army.setNode(node.getUnityNode().node);
+			node.getUnityNode().army = army.getUArmy();
+			army.setNode(node);
 		}
 		else
 		{
