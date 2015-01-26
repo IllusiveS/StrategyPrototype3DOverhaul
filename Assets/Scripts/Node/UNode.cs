@@ -93,21 +93,7 @@ public class UNode : MonoBehaviour {
 
 	public void setActive(Node.Status status)
 	{
-        switch (status)
-        {
-            case Node.Status.ATTACKABLE:
-                movementStatus.setAttack();
-                break;
-            case Node.Status.ENTERABLE:
-                movementStatus.setMovement();
-                break;
-            case Node.Status.PASSABLE: 
-                movementStatus.setMovement();
-                break;
-            case Node.Status.NOTHING:
-                movementStatus.reset();
-                break;
-        }
+       
 	}
 
 	NodeCost getTileType()

@@ -191,4 +191,17 @@ public class Algorithm{
 			nodes.RemoveAt(0);
 		} while(nodes.Count > 0);
 	}
+    public void DestinateNode(Army army, Node end)
+    {
+        List<UNode> trasa = GenerateRoute(army.getNode(), end);
+
+        foreach (Node nod in AllTheNodes.AccessAllNodeList())
+        {
+            nod.setActive(Node.Status.NOTHING);
+        }
+        foreach (UNode nod in trasa)
+        {
+            nod.setActive(Node.Status.ENTERABLE);
+        }
+    }
 }

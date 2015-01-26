@@ -30,10 +30,12 @@ public class Node
 
     public NodeCost costCalculator;
 
-    public Status nodeStatus;
+    public Status nodeStatus = Status.NOTHING;
 
     public enum Status
     {
+		FINAL,
+        ROUTE,
         ATTACKABLE,
         PASSABLE,
         ENTERABLE,
