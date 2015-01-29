@@ -1,19 +1,17 @@
 using System;
 public class RegularAttackStrategy : IAttackStrategy
 {
-	protected IUnitCombat UnitCombat;
-
 	public RegularAttackStrategy ()
 	{
 
 	}
 
-	public void setParent(IUnitCombat com)
+	public void setParent(UnitCombat com)
 	{
-		UnitCombat = com;
+
 	}
 
-	public void Attack(IUnitCombat attacker, IUnitCombat defender)
+	public void Attack(UnitCombat attacker, UnitCombat defender)
 	{
 		defender.Damage (attacker.getStrength());
 	}

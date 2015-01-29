@@ -1,6 +1,6 @@
 using System;
 public interface IAttackStrategy		
 {
-	void Attack(IUnitCombat attacker, IUnitCombat defender);
-	void setParent(IUnitCombat com);
+	void Attack(UnitCombat attacker, UnitCombat defender);
+	void setParent(UnitCombat com);
 }

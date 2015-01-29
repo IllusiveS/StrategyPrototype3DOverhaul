@@ -91,7 +91,7 @@ public class UCombatUnitModule : MonoBehaviour, ITurnObserver {
 			attackable = false;
 
 			selected.used = true;
-			selected.GetComponent<UUnit>().unit.attack(GetComponent<UUnit>().unit);
+			selected.GetComponent<UUnit>().unit.attack(GetComponent<UUnit>().unit.combatModule);
 
 			selected = null;
 

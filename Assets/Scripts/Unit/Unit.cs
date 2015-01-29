@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class Unit : IUnit, IUnitCombat{
+[System.Serializable]
+public class Unit : IUnit{
 
 	public UUnit unityUnit;
 
@@ -10,14 +11,14 @@ public class Unit : IUnit, IUnitCombat{
 	public string name;
 	public string description;
 
-	public IUnitCombat combatModule;
+	public UnitCombat combatModule;
 
 	public Sprite sprite;
 	public Sprite desaturated;
 
 	public Unit()
 	{
-
+		combatModule = new UnitCombat ();
 	}
 
 	public bool getIsAttackable()
@@ -92,12 +93,12 @@ public class Unit : IUnit, IUnitCombat{
 		combatModule.setGlory (i);
 	}
 	
-	public bool canAttack(IUnitCombat combat)
+	public bool canAttack(UnitCombat combat)
 	{
 		return combatModule.canAttack (combat);
 	}
 	
-	public void attack(IUnitCombat combat)
+	public void attack(UnitCombat combat)
 	{
 		combatModule.attack (combat);
 	}

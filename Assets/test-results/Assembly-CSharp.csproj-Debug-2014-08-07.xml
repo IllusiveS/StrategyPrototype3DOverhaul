@@ -451,7 +451,7 @@ Execution time: 1,05ms</Message>
                   <Skipped>0</Skipped>
                   <Ignored>0</Ignored>
                   <Time />
-                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;IUnitCombat&gt; instead.</Message>
+                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;UnitCombat&gt; instead.</Message>
                   <StackTrace>   w NSubstitute.Core.SubstituteFactory.CreatePartial(Type[] typesToProxy, Object[] constructorArguments)
    w NSubstitute.Substitute.ForPartsOf[T](Object[] constructorArguments)
    w AssemblyCSharp.AttackStrategyTests.DyingTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 18</StackTrace>
@@ -468,7 +468,7 @@ Execution time: 1,05ms</Message>
                   <Skipped>0</Skipped>
                   <Ignored>0</Ignored>
                   <Time />
-                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;IUnitCombat&gt; instead.</Message>
+                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;UnitCombat&gt; instead.</Message>
                   <StackTrace>   w NSubstitute.Core.SubstituteFactory.CreatePartial(Type[] typesToProxy, Object[] constructorArguments)
    w NSubstitute.Substitute.ForPartsOf[T](Object[] constructorArguments)
    w AssemblyCSharp.AttackStrategyTests.DyingTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 18</StackTrace>
@@ -532,7 +532,7 @@ Actually received no matching calls.
    w NSubstitute.Core.CallRouter.Route(ICall call)
    w NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
    w Castle.DynamicProxy.AbstractInvocation.Proceed()
-   w Castle.Proxies.IUnitCombatProxy.Die()
+   w Castle.Proxies.UnitCombatProxy.Die()
    w AssemblyCSharp.AttackStrategyTests.DyingTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 25</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />
@@ -560,7 +560,7 @@ Actually received no matching calls.
    w NSubstitute.Core.CallRouter.Route(ICall call)
    w NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
    w Castle.DynamicProxy.AbstractInvocation.Proceed()
-   w Castle.Proxies.IUnitCombatProxy.Die()
+   w Castle.Proxies.UnitCombatProxy.Die()
    w AssemblyCSharp.AttackStrategyTests.DyingTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 25</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />
@@ -588,7 +588,7 @@ Actually received no matching calls.
    w NSubstitute.Core.CallRouter.Route(ICall call)
    w NSubstitute.Proxies.CastleDynamicProxy.CastleForwardingInterceptor.Intercept(IInvocation invocation)
    w Castle.DynamicProxy.AbstractInvocation.Proceed()
-   w Castle.Proxies.IUnitCombatProxy.Die()
+   w Castle.Proxies.UnitCombatProxy.Die()
    w AssemblyCSharp.AttackStrategyTests.DyingTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 25</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />
@@ -656,7 +656,7 @@ Execution time: 0,98ms</Message>
                   <Skipped>0</Skipped>
                   <Ignored>0</Ignored>
                   <Time />
-                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;IUnitCombat&gt; instead.</Message>
+                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;UnitCombat&gt; instead.</Message>
                   <StackTrace>   w NSubstitute.Core.SubstituteFactory.CreatePartial(Type[] typesToProxy, Object[] constructorArguments)
    w NSubstitute.Substitute.ForPartsOf[T](Object[] constructorArguments)
    w AssemblyCSharp.AttackStrategyTests.RegularAttackStrategyTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 30</StackTrace>
@@ -673,7 +673,7 @@ Execution time: 0,98ms</Message>
                   <Skipped>0</Skipped>
                   <Ignored>0</Ignored>
                   <Time />
-                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;IUnitCombat&gt; instead.</Message>
+                  <Message>NSubstitute.Exceptions.CanNotPartiallySubForInterfaceOrDelegateException : Can only substitute for parts of classes, not interfaces or delegates. Try `Substitute.For&lt;UnitCombat&gt; instead.</Message>
                   <StackTrace>   w NSubstitute.Core.SubstituteFactory.CreatePartial(Type[] typesToProxy, Object[] constructorArguments)
    w NSubstitute.Substitute.ForPartsOf[T](Object[] constructorArguments)
    w AssemblyCSharp.AttackStrategyTests.RegularAttackStrategyTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 30</StackTrace>
@@ -691,7 +691,7 @@ Execution time: 0,98ms</Message>
                   <Ignored>0</Ignored>
                   <Time />
                   <Message>System.NullReferenceException : Odwołanie do obiektu nie zostało ustawione na wystąpienie obiektu.</Message>
-                  <StackTrace>   w UnitCombat.attack(IUnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 69
+                  <StackTrace>   w UnitCombat.attack(UnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 69
    w AssemblyCSharp.AttackStrategyTests.RegularAttackStrategyTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 35</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />
@@ -707,7 +707,7 @@ Execution time: 0,98ms</Message>
                   <Ignored>0</Ignored>
                   <Time />
                   <Message>System.NullReferenceException : Odwołanie do obiektu nie zostało ustawione na wystąpienie obiektu.</Message>
-                  <StackTrace>   w UnitCombat.attack(IUnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 69
+                  <StackTrace>   w UnitCombat.attack(UnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 69
    w AssemblyCSharp.AttackStrategyTests.RegularAttackStrategyTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 35</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />
@@ -723,7 +723,7 @@ Execution time: 0,98ms</Message>
                   <Ignored>0</Ignored>
                   <Time />
                   <Message>System.NullReferenceException : Odwołanie do obiektu nie zostało ustawione na wystąpienie obiektu.</Message>
-                  <StackTrace>   w UnitCombat.attack(IUnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 69
+                  <StackTrace>   w UnitCombat.attack(UnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 69
    w AssemblyCSharp.AttackStrategyTests.RegularAttackStrategyTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 35</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />
@@ -739,7 +739,7 @@ Execution time: 0,98ms</Message>
                   <Ignored>0</Ignored>
                   <Time />
                   <Message>System.NullReferenceException : Odwołanie do obiektu nie zostało ustawione na wystąpienie obiektu.</Message>
-                  <StackTrace>   w UnitCombat.attack(IUnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 71
+                  <StackTrace>   w UnitCombat.attack(UnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 71
    w AssemblyCSharp.AttackStrategyTests.RegularAttackStrategyTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 35</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />
@@ -755,7 +755,7 @@ Execution time: 0,98ms</Message>
                   <Ignored>0</Ignored>
                   <Time />
                   <Message>System.NullReferenceException : Odwołanie do obiektu nie zostało ustawione na wystąpienie obiektu.</Message>
-                  <StackTrace>   w UnitCombat.attack(IUnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 71
+                  <StackTrace>   w UnitCombat.attack(UnitCombat combat) w c:\Documents and Settings\admin\Moje dokumenty\Dysk Google\Dupa\Assets\Scripts\Unit\CombatUnit\UnitCombat.cs:wiersz 71
    w AssemblyCSharp.AttackStrategyTests.RegularAttackStrategyTest() w c:\Documents and Settings\admin\Moje dokumenty\Dupa\Assets\NUnitTests\AttackStrategyTests.cs:wiersz 33</StackTrace>
                   <ConsoleOutput />
                   <ConsoleError />

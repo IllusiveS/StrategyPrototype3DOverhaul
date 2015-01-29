@@ -26,7 +26,7 @@ public class UnitFactory
 		unit.combatModule = new UnitCombat ();
 
 		unit.setCombatStrategy(addStrategy());
-		unit.setRangeStrategy (new RegularAttackRange ());
+		//unit.setRangeStrategy (new RegularAttackRange ());
 
 		unit.setGlory (Glory);
 		unit.setRange (Range);
@@ -55,10 +55,10 @@ public class UnitFactory
 		switch(this.attackType)
 		{
 		case AttackType.Regular:
-			strategia = new RegularAttackStrategy();
+			//strategia = new RegularAttackStrategy();
 			break;
 		case AttackType.Trample:
-			strategia = new TrampleAttackStrategy();
+			//strategia = new TrampleAttackStrategy();
 			break;
 		}
 

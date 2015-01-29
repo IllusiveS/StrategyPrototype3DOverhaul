@@ -78,7 +78,7 @@ public class Combat : ICombat, ICombatSituation{
 		return empty;
 	}
 	
-	public void FindAttackable(IUnitCombat attacker)
+	public void FindAttackable(UnitCombat attacker)
 	{
 	}
 

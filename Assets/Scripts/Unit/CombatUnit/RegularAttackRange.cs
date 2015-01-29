@@ -6,7 +6,7 @@ public class RegularAttackRange : IAttackRangeStrategy
 	{
 	}
 	
-	public bool CanAttack(IUnitCombat attacker, IUnitCombat defender)
+	public bool CanAttack(UnitCombat attacker, UnitCombat defender)
 	{
 		int range = attacker.getRange ();
 		int distance = 0;

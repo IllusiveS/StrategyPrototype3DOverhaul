@@ -112,7 +112,7 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 		{
 			try
 			{
-				if(attacker.GetComponent<UUnit>().unit.canAttack(un))
+				if(attacker.GetComponent<UUnit>().unit.canAttack(un.combatModule))
 				{
 					un.unityUnit.GetComponent<UCombatUnitModule>().attackable = true;
 					un.unityUnit.GetComponent<UCombatUnitModule>().selectableView.UpdateDisplay();

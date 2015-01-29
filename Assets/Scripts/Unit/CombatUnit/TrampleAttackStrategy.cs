@@ -2,13 +2,11 @@ using System;
 
 public class TrampleAttackStrategy : IAttackStrategy
 {
-	protected IUnitCombat UnitCombat;
-
 	public TrampleAttackStrategy ()
 	{
 	}
 
-	public void Attack(IUnitCombat attacker, IUnitCombat defender)
+	public void Attack(UnitCombat attacker, UnitCombat defender)
 	{
 		int damageStopped = defender.getStrength ();
 
@@ -20,7 +18,7 @@ public class TrampleAttackStrategy : IAttackStrategy
 				trampled.Damage(attacker.getStrength() - damageStopped);
 		}
 	}
-	public void setParent(IUnitCombat com)
+	public void setParent(UnitCombat com)
 	{
 		UnitCombat = com;
 	}

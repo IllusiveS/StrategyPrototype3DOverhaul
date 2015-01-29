@@ -1,6 +1,9 @@
 using System;
+using AdvancedInspector;
 
-public class UnitCombat : IUnitCombat
+[System.Serializable]
+[AdvancedInspector]
+public class UnitCombat
 {
 	protected ICombatSituation situation;
 
@@ -13,8 +16,13 @@ public class UnitCombat : IUnitCombat
 
 	protected int Player;
 
-	protected IAttackStrategy attackStrategy;
-	protected IAttackRangeStrategy rangeStrategy;
+	[Inspect]
+	[CreateDerived]
+	protected AttackNormal attackStrategy;
+
+	[Inspect]
+	[CreateDerived]
+	protected RangeNormal rangeStrategy;
 
 	protected bool isAttackable;
 	protected bool isDead;
@@ -99,14 +107,14 @@ public class UnitCombat : IUnitCombat
 		Glory = i;
 	}
 	
-	public bool canAttack(IUnitCombat combat)
+	public bool canAttack(UnitCombat combat)
 	{
 		bool stuff = rangeStrategy.CanAttack (this, combat);
 		isAttackable = stuff;
 		return stuff;
 	}
 	
-	public void attack(IUnitCombat combat)
+	public void attack(UnitCombat combat)
 	{
 		attackStrategy.Attack (this, combat);
 	}
@@ -126,7 +134,7 @@ public class UnitCombat : IUnitCombat
 	}
 	public void setCombatStrategy(IAttackStrategy a)
 	{
-		attackStrategy = a;
+		attackStrategy = (AttackNormal)a;
 	}
 	
 	public IAttackRangeStrategy getRangeStrategy()
@@ -135,7 +143,7 @@ public class UnitCombat : IUnitCombat
 	}
 	public void setRangeStrategy(IAttackRangeStrategy a)
 	{
-		rangeStrategy = a;
+		rangeStrategy = (RangeNormal)a;
 	}
 
 	public ICombatSituation getCombatSituation()

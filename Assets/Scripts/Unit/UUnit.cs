@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
+using AdvancedInspector;
 using System.Collections;
 
+[ExecuteInEditMode]
 public class UUnit : MonoBehaviour {
 
 	public Unit unit;
 
-	public UnitFactory factory;
+	[Inspect(-1)]
+	public UnitFactory Creator;
 
 	DisplayUnitDetails detailsDisplay;
 
@@ -14,7 +17,7 @@ public class UUnit : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		unit = factory.getUnit ();
+		unit = new Unit ();
 		unit.unityUnit = this;
 	}
 
@@ -26,8 +29,7 @@ public class UUnit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Xcoord = unit.getXCoord ();
-		Ycoord = unit.getYCoord ();
+		
 	}
 
 	void OnMouseEnter()
