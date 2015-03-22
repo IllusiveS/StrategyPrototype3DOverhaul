@@ -6,3 +6,9 @@ Main reason for this project was to check how well i did the MVC previously, mos
 Along the line i started toying with delegates events and dependency injection and i regret not doing it sooner. They would make my life much easier    
 
 So now im done with this project, i was able to change it to 3d with no problem whatsoever so i consider it a success
+
+
+I used 
+Advanced Inspector  https://www.assetstore.unity3d.com/en/#!/content/18025
+and  
+Prefab Evolution https://www.assetstore.unity3d.com/en/#!/content/17557
