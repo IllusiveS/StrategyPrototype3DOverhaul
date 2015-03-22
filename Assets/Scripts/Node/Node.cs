@@ -1,17 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using AdvancedInspector;
+using System.Collections.Generic;
 
-
-[System.Serializable]
+[System.Serializable, AdvancedInspector]
 public class Node
 {
+    public string nodeClass;
 
     public UNode node;
 
-    public NodeEntrance entrance;
-    public NodeExit exit;
+	[Inspect, CreateDerived, SerializeField]
+	protected NodeNormal nodeSpecial;
 
+    [Inspect]
     public Army army = null;
 
     public int NeighboursNumber;
@@ -21,7 +23,9 @@ public class Node
     public bool bWasVisited;
     public bool bIsActivated;
 
+    [Inspect]
     public int iCost;
+    [Inspect]
     public int iMoveLeft;
 
     public List<Node> Neighbours;
@@ -29,8 +33,17 @@ public class Node
     public Node prevNode;
 
     public NodeCost costCalculator;
-
+    [Inspect]
     public Status nodeStatus = Status.NOTHING;
+
+	[Inspect]
+	[Enum(true)]
+	public TerrainType terrainType;
+
+	[Inspect, SerializeField]
+	protected nodeZOC zoneOfControl;
+	[Inspect, SerializeField]
+	protected nodeRecruitment recruit = new nodeRecruitment();
 
     public enum Status
     {
@@ -46,10 +59,13 @@ public class Node
     {
         AllTheNodes.AccessAllNodeList().Add(this);
         this.node = node;
-
-        entrance = new NodeEntrance();
-        exit = new NodeExit();
+        setActive(Status.NOTHING);
     }
+	public Node()
+	{
+		AllTheNodes.AccessAllNodeList().Add(this);
+		setActive(Status.NOTHING);
+	}
 
     public void SelectNode(Node selected, Algorithm algorytm)
     {
@@ -78,21 +94,45 @@ public class Node
 
     public void Enter(Army army)
     {
-        entrance.Enter(this, army);
+        nodeSpecial.Enter(this, army);
+		army.controlTheZone ();
     }
     public void Leave(Army army)
     {
-        exit.Leave(this, army);
+        nodeSpecial.Leave(this, army);
     }
 
     public Army getArmy()
     {
-        return army;
+		try {
+			if (getUnityNode ().army == null)
+				return null;
+			else
+				return getUnityNode ().army.army;
+		} catch (Exception ex) {
+			return null;
+		}
     }
-    public int getCost()
+	public int getCost()
+	{
+		return iCost;
+	}
+    public int getCost(Army army)
     {
-        return iCost;
+		return getCost (army.getAlgorithm ());
     }
+	public int getCost(Algorithm algo)
+	{
+		int cost = -1;
+		cost = algo.checkForMovementModifier (terrainType);
+		if (cost == -1)
+			cost = iCost;
+
+		if(!zoneOfControl.isFriendly(algo.armyOwner.army))
+			cost += 1;
+
+		return cost;
+	}
     public Node getPrev()
     {
         return prevNode;
@@ -160,7 +200,10 @@ public class Node
 		this.army = army;
 
 		if(army == null)
+		{
+            army = null;
 			getUnityNode().army = null;
+		}	
 		else
 		{
 			army.setNode(this);
@@ -178,9 +221,9 @@ public class Node
     {
         if (getArmy() != null)
         {
-            if (getArmy().getPlayer() != alg.armyOwner.getPlayer() && prev.bIsActivated)
+            if (getArmy().getPlayer() != alg.armyOwner.army.getPlayer() && prev.nodeStatus == Status.ENTERABLE)
             {
-                if (alg.armyOwner.getCanAttack())
+                if (alg.armyOwner.army.getCanAttack())
                     return true;
                 else
                     return false;
@@ -192,7 +235,7 @@ public class Node
     {
         if (getArmy() != null)
         {
-            if (getArmy().getPlayer() == alg.armyOwner.getPlayer())
+            if (getArmy().getPlayer() == alg.armyOwner.army.getPlayer())
             {
                 return true;
             }
@@ -201,16 +244,27 @@ public class Node
     }
     public bool IsEnterable(Algorithm alg, Node prev)
     {
-        try
-        {
-            if (getUnityNode().army == null)
-                return true;
-            else
-                return false;
-        }
-        catch (System.NullReferenceException)
-        {
+        if (getArmy() == null)
+            return true;
+        else
             return false;
-        }
-    }
+	}
+
+	public int getOwner ()
+	{
+		return nodeSpecial.getOwner ();
+	}
+
+	public void spreadInfluence(Army army)
+	{
+		zoneOfControl.spreadInfluence (army);
+	}
+	public void despreadInfluence(Army army)
+	{
+		zoneOfControl.despreadInfluence (army);
+	}
+	public List<UUnit> possibleRecruitments(Leader leader)
+	{
+		return recruit.possibleRecruitments (leader);
+	}
 }

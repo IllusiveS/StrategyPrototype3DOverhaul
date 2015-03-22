@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using AdvancedInspector;
 
 public class ArmyMovement : MonoBehaviour {
 
-	private class UNodeList : List<UNode>{};
-
-	UNodeList trasa = new UNodeList ();
+	List<UNode> trasa = new List<UNode> ();
 
 	Army movingArmy;
 
@@ -20,7 +19,7 @@ public class ArmyMovement : MonoBehaviour {
 
 	public float speed;
 
-	bool moving = false;
+	public bool moving = false;
 
 	public void Start()
 	{
@@ -30,6 +29,7 @@ public class ArmyMovement : MonoBehaviour {
 	public void setRoute(List<UNode> route)
 	{
 		moving = true;
+		trasa.Clear ();
 		trasa.AddRange (route);
         setNewTarget();
 		progress = 2.0f;
@@ -41,6 +41,7 @@ public class ArmyMovement : MonoBehaviour {
 			Move ();
 		}
 	}
+
 
 	void Move()
 	{
@@ -60,21 +61,30 @@ public class ArmyMovement : MonoBehaviour {
 
 	void setNewTarget()
 	{
-		start = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-		startNode = movingArmy.getNode ().node;
-		try
-		{
-            end = new Vector3(trasa[0].transform.position.x, transform.position.y, trasa[0].transform.position.z);
-			endNode = trasa[0];
-			trasa.RemoveAt (0);
-		}catch (System.ArgumentOutOfRangeException)
-		{
-			finishMove();
-			return;
-		}
-		endNode.node.Enter(movingArmy);
-		startNode.node.Leave(movingArmy);
-		movingArmy.setNode(endNode.node);
+        try
+        {
+            start = new Vector3(trasa[0].transform.position.x, transform.position.y, trasa[0].transform.position.z);
+            startNode = trasa[0];
+            if (trasa[1].army != null && trasa[1].army.army.getPlayer() != GetComponent<UArmy>().army.getPlayer())
+            {
+                finishAttackMove();
+                return;
+            }
+            else
+            {
+                end = new Vector3(trasa[1].transform.position.x, transform.position.y, trasa[1].transform.position.z);
+                endNode = trasa[1];
+            }
+        }
+        catch (System.ArgumentOutOfRangeException)
+        {
+            finishMove();
+            return;
+        }
+        endNode.node.Enter(movingArmy);
+        startNode.node.Leave(movingArmy);
+        movingArmy.setNode(endNode.node);
+        trasa.RemoveAt(0);
 	}
 
 	void finishMove()
@@ -84,22 +94,18 @@ public class ArmyMovement : MonoBehaviour {
 		endNode = null;
 		startNode = null;
 		moving = false;
-		//Army.selected.selectArmy (null);
-		Army.selected = null;
+		try {
+			Army.selected.selectArmy (null);
+		} catch (System.Exception ex) {
+	
+		}
 	}
 	void finishAttackMove()
 	{
-		UArmy unityArmy = movingArmy.getUArmy ();
-		UNode closestNode;
-		closestNode = endNode.node.prevNode.getUnityNode();
-		Vector3 newPlace = new Vector3 (closestNode.transform.position.x, closestNode.transform.position.y, -0.5f);
-		start = newPlace;
-		unityArmy.transform.position = newPlace;
 
-		unityArmy.army.setNode (endNode.node.prevNode.getUnityNode().node);
-		closestNode.node.army = movingArmy;
+        moving = false;
 
-		unityArmy.GetComponent<CombatInitiator> ().pressTheAttack (endNode.army.army);
+		GetComponent<UArmy> ().GetComponent<CombatInitiator> ().pressTheAttack (trasa[1].node.army);
 
 		finishMove ();
 	}

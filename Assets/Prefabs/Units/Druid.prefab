@@ -1,0 +1,177 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &174170
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22474170}
+  - 114: {fileID: 11474174}
+  - 114: {fileID: 11474178}
+  - 114: {fileID: 11474176}
+  - 114: {fileID: 11474172}
+  - 114: {fileID: 11474170}
+  - 114: {fileID: 11412022}
+  m_Layer: 0
+  m_Name: Druid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &11412022
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 187f80e4ab952174b88cc37bf5b5d103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 11474174}
+  modifier:
+    terrainType: 4
+    modifiedSpeed: 1
+  description: Faster forest movement
+--- !u!114 &11474170
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92382188643ddb34d81e3a83836dbb7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 11474174}
+--- !u!114 &11474172
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fab84dcbf9459bd40b5337659500e263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 11474174}
+  Range: 1
+--- !u!114 &11474174
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f48ae4a0d139e9b468e1e36cd226852b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit:
+    unityUnit: {fileID: 11474174}
+    owner: {fileID: 0}
+    name: Druid
+    combatModule:
+      attackStrategy: {fileID: 11474170}
+      rangeStrategy: {fileID: 11474172}
+      XCoord: 0
+      YCoord: 0
+      Strength: 1
+      Attacks: 1
+      Glory: 2
+      Player: 1
+      isAttackable: 0
+      isSelectable: 0
+      isFragile: 0
+    armyModule:
+      movementModifier: 0
+      armySpecial: {fileID: 11412022}
+    sprite: {fileID: 21300000, guid: 2059b9981ecbc6f47a564341dc916373, type: 3}
+    desaturated: {fileID: 21300000, guid: fb30bacab46da084eb15f2df022821c0, type: 3}
+--- !u!114 &11474176
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a02d0f612a241b293c0da4f82b712c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Properties:
+    Properties: []
+    Groups: []
+    Hidden: 
+  Links:
+    Links:
+    - LIIF: -1388541300
+      InstanceTarget: {fileID: 11474176}
+    - LIIF: -1130027442
+      InstanceTarget: {fileID: 174170}
+    - LIIF: -114981319
+      InstanceTarget: {fileID: 11474174}
+    - LIIF: -573877593
+      InstanceTarget: {fileID: 22474170}
+    - LIIF: 1551691757
+      InstanceTarget: {fileID: 11474178}
+    - LIIF: -605144755
+      InstanceTarget: {fileID: 11474170}
+    - LIIF: 1516700570
+      InstanceTarget: {fileID: 11474172}
+    - LIIF: 671905877
+      InstanceTarget: {fileID: 11412022}
+  Modifications:
+    Modificated: []
+    NonPrefabObjects: []
+    NonPrefabComponents: []
+    RemovedObjects: 
+    TransformParentChanges: []
+  ParentPrefabGUID: 
+  PrefabGUID: 0a13cd34d0439bc4c8d51d1450f3f3d2
+--- !u!114 &11474178
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34c46d6a548b4504a8858e66a60c05d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &22474170
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 174170}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .5, y: .5}
+  m_AnchorMax: {x: .5, y: .5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: .5, y: .5}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 174170}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1

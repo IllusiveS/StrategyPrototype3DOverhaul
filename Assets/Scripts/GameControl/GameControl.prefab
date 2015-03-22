@@ -54,9 +54,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d2fe7ceb9de1e4c94ab82b37712484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1: {fileID: 2800000, guid: 6210fc3540cdf1644b1833f5ad66ffa6, type: 3}
-  player2: {fileID: 2800000, guid: a5e05e48299a1ad40bc6e1c994007924, type: 3}
-  player3: {fileID: 0}
+  playerColors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: .324137926, g: 1, b: 0, a: 0}
+  - {r: .158620834, g: 0, b: 1, a: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -1,42 +1,71 @@
 using System;
 using UnityEngine;
+using AdvancedInspector;
 using System.Collections.Generic;
+using Zenject;
 
-[System.Serializable]
+[System.Serializable, AdvancedInspector]
 public class Army : ITurnObserver, IUnitContainer, IOwnable
 {
 	public static Army selected = null;
 
 	public UArmy uArmy;
 
-	public List<Unit> units = new List<Unit>();
+	protected Player player;
+
+	public Player Player {
+		get {
+			return player;
+		}
+	}
+
+	[Inspect]
+	public List<UUnit> units = new List<UUnit>();
 
 	public bool isActive;
 	public bool isItsTurn;
-	public bool canAttack;
+    [Inspect]
+	public bool canAttack = true;
 
 	int iMove;
-	int iMoveMax;
-	int iPlayerOwner;
+	[Inspect, SerializeField]int iMoveMax;
+	[Inspect, SerializeField]int iPlayerOwner;
 
 	Node currentNode;
 
-	public Algorithm movingAlgorithm;
+	[Inspect]
+	public Algorithm movingAlgorithm = new Algorithm ();
 
+	[Inspect, SerializeField]
+	protected ZoneOfControlModule zocModule;
+
+	public Army()
+	{
+		iMove = iMoveMax;
+		movingAlgorithm.armyOwner = uArmy;
+	}
+
+	public void controlTheZone()
+	{
+		zocModule.updateZOC (this);
+	}
+
+	public void setUnits()
+	{
+	
+	}
 	public Army (int i, int speed, UArmy arm)
 	{
-		movingAlgorithm = new Algorithm ();
-		movingAlgorithm.setArmyOwner (this);
+		//movingAlgorithm.armyOwner = this;
 		uArmy = arm;
-		iPlayerOwner = i;
-		iMoveMax = speed;
 	}
 
 	public void attachToPlayer()
 	{
 		if (iPlayerOwner >= 0)
 		{
-			Player player = Player.getPlayer (iPlayerOwner);
+			Player player = uArmy.control.getPlayer(iPlayerOwner);
+			this.player = player;
 			player.Attach (this);
 		}
 	}
@@ -44,7 +73,7 @@ public class Army : ITurnObserver, IUnitContainer, IOwnable
 	{
 		if (iPlayerOwner >= 0)
 		{
-			Player player = Player.getPlayer (iPlayerOwner);
+			Player player = uArmy.control.getPlayer(iPlayerOwner);
 			player.Detach(this);
 		}
 	}
@@ -96,7 +125,8 @@ public class Army : ITurnObserver, IUnitContainer, IOwnable
 	public void attackArmy(Army def)
 	{
 		List<UNode> trasa = Army.selected.getAlgorithm ().GenerateRoute (getNode (), def.getNode ());
-		Army.selected.getUArmy().GetComponent<ArmyMovement>().setRoute(trasa);
+		
+        Army.selected.getUArmy().GetComponent<ArmyMovement>().setRoute(trasa);
 	}
 
 	public Node getNode()
@@ -109,7 +139,11 @@ public class Army : ITurnObserver, IUnitContainer, IOwnable
         try {
 			uArmy.node = node.getUnityNode ();
 		} catch (System.NullReferenceException) {
-			uArmy.node = null;
+			try {
+				uArmy.node = null;
+			} catch (Exception ex) {
+				
+			}
 		}
 	}
 
@@ -162,18 +196,25 @@ public class Army : ITurnObserver, IUnitContainer, IOwnable
 
 	public List<Unit> getUnits()
 	{
+		List<Unit> units = new List<Unit> ();
+		foreach(UUnit un in this.units)
+		{
+			units.Add(un.unit);
+		}
 		return units;
 	}
 
 	public void addUnit(Unit u)
 	{
-		units.Add (u);
+		units.Add (u.unityUnit);
 		u.setPlayer (getPlayer ());
 		u.owner = this.uArmy;
+		u.armyModule.addUnit (this);
 	}
 	public void removeUnit(Unit u)
 	{
-		units.Remove(u);
+		units.Remove(u.unityUnit);
+		u.armyModule.removeUnit (this);
 	}
 
 	public int getOwner()
@@ -188,9 +229,9 @@ public class Army : ITurnObserver, IUnitContainer, IOwnable
 	public int getGlory()
 	{
 		int glory = 0;
-		foreach(Unit un in units)
+		foreach(UUnit un in units)
 		{
-			glory += un.getGlory();
+			glory += un.unit.getGlory();
 		}
 		return glory;
 	}
@@ -202,5 +243,17 @@ public class Army : ITurnObserver, IUnitContainer, IOwnable
 	public bool getCanAttack()
 	{
 		return canAttack;
+	}
+	public void addMovementModifier(Modifier mod)
+	{
+		movingAlgorithm.addMovementModifier (mod);
+	}
+	public void removeMovementModifier(Modifier mod)
+	{
+		movingAlgorithm.removeMovementModifier (mod);
+	}
+	public void checkForMovementModifier(TerrainType type)
+	{
+		movingAlgorithm.checkForMovementModifier (type);
 	}
 }

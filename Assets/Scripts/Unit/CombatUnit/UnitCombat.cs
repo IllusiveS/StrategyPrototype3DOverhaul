@@ -1,36 +1,68 @@
 using System;
+using UnityEngine;
 using AdvancedInspector;
+using System.Collections.Generic;
 
-[System.Serializable]
-[AdvancedInspector]
-public class UnitCombat
+[System.Serializable, AdvancedInspector]
+public class UnitCombat : ITurnObserver
 {
+	[Inspect, CreateDerived, SerializeField]
+	protected AttackBase attackStrategy;
+
+	[Inspect, CreateDerived, SerializeField]
+	protected List<AttackBase> attacksStrategy;
+
+	[Inspect, CreateDerived, SerializeField]
+	protected RangeBase rangeStrategy;
+
 	protected ICombatSituation situation;
 
+	[Inspect, SerializeField]
 	protected int XCoord;
+	[Inspect, SerializeField]
 	protected int YCoord;
 
-	protected int Strength;
-	protected int Range;
-	protected int Glory;
+	[Inspect, SerializeField]
+    protected int Strength;
+    [Inspect, SerializeField]
+    protected int Attacks;
+	[Inspect, SerializeField]
+    protected int Glory;
 
+	[Inspect, SerializeField]
 	protected int Player;
 
-	[Inspect]
-	[CreateDerived]
-	protected AttackNormal attackStrategy;
+    [Inspect, SerializeField]
+	protected bool isAttackable = false;
+	protected bool isDead = false;
+    [Inspect, SerializeField]
+	protected bool isSelectable = false;
 
 	[Inspect]
-	[CreateDerived]
-	protected RangeNormal rangeStrategy;
+	public bool isFragile;
 
-	protected bool isAttackable;
-	protected bool isDead;
-	protected bool isFragile;
+	public bool getIsSelectable()
+	{
+		return isSelectable;
+	}
+	public void setIsSelectable(bool b)
+	{
+		isSelectable = b;
+	}
 
 	public bool getIsAttackable()
 	{
 		return isAttackable;
+	}
+
+	public bool getIsFragile ()
+	{
+		return isFragile;
+	}
+
+	public void setIsAttackable (bool b)
+	{
+		isAttackable = b;
 	}
 
 	public void setFragile(bool b)
@@ -89,15 +121,6 @@ public class UnitCombat
 		setStrength(getStrength() - i);
 	}
 
-	public int getRange()
-	{
-		return Range;
-	}
-	public void setRange(int i)
-	{
-		Range = i;
-	}
-
 	public int getGlory()
 	{
 		return Glory;
@@ -110,13 +133,13 @@ public class UnitCombat
 	public bool canAttack(UnitCombat combat)
 	{
 		bool stuff = rangeStrategy.CanAttack (this, combat);
-		isAttackable = stuff;
 		return stuff;
 	}
 	
 	public void attack(UnitCombat combat)
 	{
 		attackStrategy.Attack (this, combat);
+        Attacks -= 1;
 	}
 	
 	public void Select()
@@ -127,23 +150,23 @@ public class UnitCombat
 	{
 		return isDead;
 	}
-	
-	public IAttackStrategy getCombatStrategy()
+
+    public AttackBase getCombatStrategy()
 	{
 		return attackStrategy;
 	}
-	public void setCombatStrategy(IAttackStrategy a)
+    public void setCombatStrategy(AttackBase a)
 	{
 		attackStrategy = (AttackNormal)a;
 	}
-	
-	public IAttackRangeStrategy getRangeStrategy()
+
+    public RangeBase getRangeStrategy()
 	{
 		return rangeStrategy;
 	}
-	public void setRangeStrategy(IAttackRangeStrategy a)
+	public void setRangeStrategy(RangeBase a)
 	{
-		rangeStrategy = (RangeNormal)a;
+		rangeStrategy = (RangeBase)a;
 	}
 
 	public ICombatSituation getCombatSituation()
@@ -154,6 +177,57 @@ public class UnitCombat
 	{
 		this.situation = situation;
 	}
+    public int getAttacks()
+    {
+        return Attacks;
+    }
+    public void setAttacks(int i)
+    {
+        Attacks = i;
+		if(Attacks < 0)
+			Attacks = 0;
+    }
+	public void Update (int turn)
+	{
+		isAttackable = false;
 
+        if(situation == null)
+        {
+            if (turn == Player)
+            {
+                isSelectable = true;
+            }
+            else
+            {
+                isSelectable = false;
+            }
+        }
+        else
+        {
+            if (turn == Player)
+            {
+                if (getAttacks() > 0)
+                {
+                    isSelectable = true;
+                }
+                else
+                {
+                    isSelectable = false;
+                }
+            }
+            else
+            {
+                isSelectable = false;
+            }
+        }
+	}
+
+	public string getDescription ()
+	{
+		string str = "";
+		str += rangeStrategy.getDescription ();
+		str += attackStrategy.getDescription ();
+		return str;
+	}
 }
 

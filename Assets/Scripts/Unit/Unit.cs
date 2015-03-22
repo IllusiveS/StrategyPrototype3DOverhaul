@@ -1,24 +1,49 @@
 using UnityEngine;
 using System.Collections;
+using AdvancedInspector;
 
-[System.Serializable]
+[System.Serializable, AdvancedInspector]
 public class Unit : IUnit{
 
 	public UUnit unityUnit;
 
 	public UArmy owner;
 
+	[Inspect]
 	public string name;
-	public string description;
-
+	[Inspect]
+	public string description
+	{
+		get
+		{
+			string str = "";
+			if(combatModule.getIsFragile())
+				str += "fragile\n";
+			str += combatModule.getDescription();
+			str += armyModule.getDescription();
+			return str;
+		}
+	}
+	[Inspect]
 	public UnitCombat combatModule;
+	[Inspect]
+	public UnitArmy armyModule;
 
+	[Inspect]
 	public Sprite sprite;
 	public Sprite desaturated;
 
 	public Unit()
 	{
-		combatModule = new UnitCombat ();
+	}
+
+	public bool getIsSelectable()
+	{
+		return combatModule.getIsSelectable();
+	}
+	public void setIsSelectable(bool b)
+	{
+		combatModule.setIsSelectable (b);
 	}
 
 	public bool getIsAttackable()
@@ -75,15 +100,10 @@ public class Unit : IUnit{
 	{
 		combatModule.Damage (i);
 	}
-	
-	public int getRange()
-	{
-		return combatModule.getRange ();
-	}
-	public void setRange(int i)
-	{
-		combatModule.setRange (i);
-	}
+    public int getAttacks()
+    {
+        return combatModule.getAttacks();
+    }
 	public int getGlory()
 	{
 		return combatModule.getGlory ();
@@ -111,21 +131,21 @@ public class Unit : IUnit{
 	{
 		return combatModule.Die ();
 	}
-	
-	public IAttackStrategy getCombatStrategy()
+
+    public AttackBase getCombatStrategy()
 	{
 		return combatModule.getCombatStrategy ();
 	}
-	public void setCombatStrategy(IAttackStrategy a)
+	public void setCombatStrategy(AttackBase a)
 	{
 		combatModule.setCombatStrategy (a);
 	}
-	
-	public IAttackRangeStrategy getRangeStrategy()
+
+    public RangeBase getRangeStrategy()
 	{
 		return combatModule.getRangeStrategy ();
 	}
-	public void setRangeStrategy(IAttackRangeStrategy a)
+    public void setRangeStrategy(RangeBase a)
 	{
 		combatModule.setRangeStrategy (a);
 	}

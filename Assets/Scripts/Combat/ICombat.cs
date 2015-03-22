@@ -1,7 +1,5 @@
 public interface ICombat
 {
-	ICombat getInstance();
-
 	void setUp(UCombat unity, Army atk, Army def);
 
 	Army CalculateWinner();

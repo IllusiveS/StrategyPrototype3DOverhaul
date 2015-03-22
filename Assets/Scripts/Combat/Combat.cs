@@ -3,32 +3,11 @@ using System.Collections;
 
 public class Combat : ICombat, ICombatSituation{
 
-	static public Combat instance = null;
-
-	public static Combat getSingletonInstance()
-	{
-		if (instance != null)
-		{
-			return instance;
-		}
-		else 
-			return null;
-	}
-
-	public ICombat getInstance()
-	{
-		return Combat.getSingletonInstance ();
-	}
-
 	UCombat unityModule;
 
 	Army atk;
 	Army def;
 
-	public Combat ()
-	{
-		instance = this;
-	}
 	public void setUp(UCombat unity, Army atk, Army def)
 	{
 		unityModule = unity;
@@ -69,7 +48,7 @@ public class Combat : ICombat, ICombatSituation{
 
 		foreach(Unit un in army.getUArmy().army.getUnits())
 		{
-			if(un.getXCoord() == 0)
+			if(un.getXCoord() == 1)
 			{
 				empty = false;
 			}

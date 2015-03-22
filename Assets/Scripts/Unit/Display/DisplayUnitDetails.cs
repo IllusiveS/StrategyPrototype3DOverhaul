@@ -1,38 +1,49 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using AdvancedInspector;
 
+[AdvancedInspector]
 public class DisplayUnitDetails : MonoBehaviour {
 
-	public bool display = false;
+	[Inspect]
+	public UUnit unitToDisplay;
 
-	public Unit unitToDisplay;
+	private Animator animator;
 
-	public Transform noDisplay;
-	public Transform yesDisplay;
+    public Image descriptionImage;
+
+	bool allowEmpty;
 
 	// Use this for initialization
 	void Start () {
-		unitToDisplay = GetComponentInParent<UUnit> ().unit;
-		GetComponentInChildren<TextDetails> ().setUnit (unitToDisplay);
+		animator = GetComponentInChildren<Animator> ();
+		try {
+			unitToDisplay = GetComponentInParent<UnitDisplayer> ().unitToDisplay;
+			allowEmpty = GetComponentInParent<UnitDisplayer> ().allowEmpty;
+		} catch (System.Exception ex) {
+	
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		displayInfo (display);
+
+		unitToDisplay = GetComponentInParent<UnitDisplayer> ().unitToDisplay;
+
 	}
 
 	public void displayInfo(bool display)
 	{
-		if (display)
-		{
-			transform.localPosition = yesDisplay.localPosition;
-		}
-		else
-		{
-			transform.localPosition = noDisplay.localPosition;
-		}
-		
-		GetComponentInChildren<TextDetails> ().displayInfo (display);
+		try {
+			if (display) {
+				animator.SetBool ("Display", true);
+			} else {
+				animator.SetBool ("Display", false);
+			}
+		} catch (System.Exception ex) {
 
+		}
 	}
+
 }

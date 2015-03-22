@@ -2,5 +2,5 @@ using System;
 
 public interface IVictoryPointsObserver
 {
-	int getPoints();
+	int getPoints(Player player);
 }

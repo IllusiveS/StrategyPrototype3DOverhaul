@@ -1,33 +1,33 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using AdvancedInspector;
 
+[AdvancedInspector]
 public class DisplayGlory : MonoBehaviour {
-
+	
 	public Unit unit;
-
-	TextMesh text; 
-	MeshRenderer mesh; 
-
+	
+	Text text;
+	
 	// Use this for initialization
 	void Start () {
-		text = GetComponent<TextMesh>();
-		mesh = GetComponent<MeshRenderer>();
+		text = GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		try {
+			unit = GetComponentInParent<UnitDisplayer> ().unitToDisplay.unit;
+			text.text = unit.getGlory().ToString();
+		} catch (System.Exception ex) {
+			
+		}
 	}
-
+	
 	public void displayInfo(bool display)
 	{
-		mesh.enabled = display;
-		text.text = unit.getGlory ().ToString ();
-	}
-
-	public void setUnit(Unit unit)
-	{
-		this.unit = unit;
+		text.enabled = display;
 	}
 
 }

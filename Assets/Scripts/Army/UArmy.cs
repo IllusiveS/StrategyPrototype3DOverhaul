@@ -1,23 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Zenject;
+using AdvancedInspector;
 
+[AdvancedInspector]
 public class UArmy : MonoBehaviour {
 
-	public Army army;
+	[Inject]
+	public GameControl control;
 
-	public int iPlayer;
-	public int iSpeed;
+	[Inspect]
+	public Army army;
 
 	public UNode node;
 
 	void Awake()
 	{
-		army = new Army (iPlayer, iSpeed, this);
+
 	}
 
 	// Use this for initialization
 	void Start () {
-		army.attachToPlayer ();
+		army.movingAlgorithm.armyOwner = this;
 
 		//gameObject.AddComponent<UArmyIsActive> ();
 
@@ -38,6 +42,10 @@ public class UArmy : MonoBehaviour {
 		{
 			army.addUnit(un.unit);
 		}
+		army.uArmy = this;
+		army.attachToPlayer ();
+
+		//army.setUnits ();
 	}
 
 	public void UpdateMovementDisplay()
@@ -47,12 +55,16 @@ public class UArmy : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		iSpeed = army.getSpeed ();
+		
 	}
 
 	void OnDestroy()
 	{
-		army.getNode ().Leave (null);
+		try {
+			army.getNode ().Leave (null);
+		} catch (System.Exception ex) {
+
+		}
 		//node.node.Leave (null);
 		army.detachFromPlayer ();
 	}

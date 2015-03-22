@@ -29,3 +29,12 @@ obj/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+
+# ============ #
+# Asset Store  #
+# ============ #
+
+Assets/AdvancedInspector/
+Assets/Plugins/
+Assets/Outside Assets/PrefabEvolution

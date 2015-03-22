@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Zenject;
 
 public class UNode : MonoBehaviour {
+
+	[Inject]
+	GameControl control;
 
 	public TileType tileType;
 
@@ -25,7 +29,6 @@ public class UNode : MonoBehaviour {
 
 	void Awake()
 	{
-		node = new Node (this);
 		node.costCalculator = getTileType ();
 	}
 
@@ -84,6 +87,7 @@ public class UNode : MonoBehaviour {
 		{
 			
 		}
+		node.node = this;
 	}
 
 	void Update()

@@ -1,33 +1,35 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using AdvancedInspector;
 
+[AdvancedInspector]
 public class DisplayDescription : MonoBehaviour {
 	
 	public Unit unit;
 	
-	TextMesh text; 
-	MeshRenderer mesh; 
+	Text text;
+	
+	string unitDescription;
 	
 	// Use this for initialization
 	void Start () {
-		text = GetComponent<TextMesh>();
-		mesh = GetComponent<MeshRenderer>();
+		text = GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		try {
+			unit = GetComponentInParent<UnitDisplayer> ().unitToDisplay.unit;
+			unitDescription = unit.description;
+			text.text = unitDescription;
+		} catch (System.Exception ex) {
+			
+		}
 	}
 	
 	public void displayInfo(bool display)
 	{
-		mesh.enabled = display;
-		text.text = unit.description;
+		text.enabled = display;
 	}
-	
-	public void setUnit(Unit unit)
-	{
-		this.unit = unit;
-	}
-	
 }

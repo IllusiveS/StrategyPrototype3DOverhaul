@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Zenject;
 using System.Collections.Generic;
+using AdvancedInspector;
 
+[AdvancedInspector]
 public class GameControl : MonoBehaviour, ITurnSubject {
 
 	private bool started = false;
 
 	public static int winner;
+
+	[Inspect, SerializeField]
+	public List<Player> playersList = new List<Player>();
 
 	public void Attach(ITurnObserver obs)
 	{
@@ -19,7 +25,7 @@ public class GameControl : MonoBehaviour, ITurnSubject {
 	
 	public void Notify(int turn)
 	{
-		foreach(ITurnObserver obs in players)
+		foreach(ITurnObserver obs in playersList)
 		{
 			obs.Update(turn);
 		}
@@ -27,24 +33,30 @@ public class GameControl : MonoBehaviour, ITurnSubject {
 
 	void Awake()
 	{
+
+	}
+	public Player getPlayer(int i)
+	{
+		return playersList [i];
+	}
+	public Player getCurrentPlayer()
+	{
+		return getPlayer (iTurn % MAX_PLAYERS);
+	}
+	void Start()
+	{
 		for(int i = 0; i < MAX_PLAYERS; i++)
 		{
-			Instance = this;
-			Attach(new Player(i));
+			getPlayer(i).playerColor = GetComponent<PlayerTextureSelection>().playerColors[i];
 		}
 	}
 
-	private static GameControl Instance = null;
-
 	public static int MAX_PLAYERS = 2;
-
-	public static GameControl getInstance()
-	{
-		return Instance;
-	}
 
 	public int iTurn = 0;
 	public int gameTurn = 1;
+	[Inspect]
+	public int maxTurns;
 	public int iPlayers;
 
 	public List<ITurnObserver> players = new List<ITurnObserver> ();
@@ -56,46 +68,38 @@ public class GameControl : MonoBehaviour, ITurnSubject {
 			Notify (iTurn);
 			started = true;
 		}
-
-		if(UCombat.getSingleton() == null)
-		{
-			if (GUI.Button(new Rect(10, 10, 150, 30), "Next Turn"))
-			{
-				iTurn++;
-				if(iTurn % MAX_PLAYERS == 0)
-					gameTurn++;
-				if(gameTurn > 5)
-				{
-					endGame();
-				}
-				Notify(iTurn);
-				try
-				{
-					Army.selected.selectArmy(null);
-				}
-				catch (System.NullReferenceException)
-				{
-				}
-			}
-			GUI.Label(new Rect(160, 10, 150, 30), "Turn: " + (gameTurn).ToString());
-		}
-
-		for(int i = 0; i < GameControl.MAX_PLAYERS; i++)
-		{
-			GUI.Label(new Rect(Screen.width*9/12, 5 + (15 * i), Screen.width, 20 + (15 * i)), new GUIContent( "Player " + (i+1).ToString() + ": " + Player.getPlayer(i).getPoints().ToString(), GetComponent<PlayerTextureSelection>().GetPlayerSprite(i)));
-		}
-
 	}
 
 	public void endGame()
 	{
-		if(Player.getPlayer(0).getPoints() > Player.getPlayer(1).getPoints())
+		if(getPlayer(0).getPoints() > getPlayer(1).getPoints())
 		{
 			winner = 0;
 		}
 		else
 			winner = 1;
 
-		Application.LoadLevel ("EndGame");
+		//Application.LoadLevel ("EndGame");
+	}
+
+	public void passTurn ()
+	{
+		iTurn++;
+		if (iTurn % MAX_PLAYERS == 0)
+			gameTurn++;
+		if (gameTurn > maxTurns) {
+			endGame ();
+		}
+		Notify (iTurn);
+		try {
+			Army.selected.selectArmy (null);
+			CNode.trasa.Clear ();
+		}
+		catch (System.NullReferenceException) {
+		}
+	}
+
+	public class Factory : GameObjectFactory<GameControl>
+	{
 	}
 }

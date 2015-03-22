@@ -1,89 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using AdvancedInspector;
 
+[System.Serializable, AdvancedInspector]
 public class Algorithm{
 
-	public Army armyOwner;
+	public UArmy armyOwner;
 
-	public AlgorithmCost roads;
-	public AlgorithmCost plains;
-	public AlgorithmCost forests;
-	public AlgorithmCost cities;
-
-	public int getRoadCost()
-	{
-		try
-		{
-			return roads.getCost();
-		}
-		catch (System.NullReferenceException)
-		{
-			return -1;
-		}
-	}
-	public int getPlainsCost()
-	{
-		try
-		{
-			return plains.getCost();
-		}
-		catch (System.NullReferenceException)
-		{
-			return -1;
-		}
-	}
-	public int getForestCost()
-	{
-		try
-		{
-			return forests.getCost();
-		}
-		catch (System.NullReferenceException)
-		{
-			return -1;
-		}
-	}
-	public int getCityCost()
-	{
-		try
-		{
-			return cities.getCost();
-		}
-		catch (System.NullReferenceException)
-		{
-			return -1;
-		}
-	}
-
-	public void setRoadCost(AlgorithmCost cost)
-	{
-		roads = cost;
-	}
-	public void setPlainsCost(AlgorithmCost cost)
-	{
-		plains = cost;
-	}
-	public void setForestCost(AlgorithmCost cost)
-	{
-		forests = cost;
-	}
-	public void setCityCost(AlgorithmCost cost)
-	{
-		cities = cost;
-	}
+	[Inspect, SerializeField]
+	protected List<Modifier> MovementModifiers = new List<Modifier>();
 
 	public Algorithm()
 	{
-		roads = null;
-		plains = null;
-		forests = null;
-		cities = null;
+
+	}
+	public Algorithm(Army army)
+	{
+		setArmyOwner (army);
 	}
 
 	public void setArmyOwner(Army army)
 	{
-		armyOwner = army;
+		armyOwner = army.uArmy;
 	}
 
 	public void GenerateGrid(Node selected, int i)
@@ -98,27 +37,27 @@ public class Algorithm{
 	public Node TryNode(Node start, Node end, int i)
 	{
         if (end == null) { return null; }
+		if (end.IsEnterable(this, start) && testViability(start, end, i))
+		{
+			end.setPrev(start);
+			end.setMoveLeft(i - end.getCost(this));
+			end.setActive(Node.Status.ENTERABLE);
+			end.setVisited(true);
+			return end;
+		}
+		else
         if (end.IsAttackable(this, start) && testViability(start, end, i))
         {
             end.setPrev(start);
             end.setActive(Node.Status.ATTACKABLE);
-            end.setMoveLeft(i - end.getCost());
-        }
-        else
-        if (end.IsEnterable(this, start) && testViability(start, end, i))
-        {
-            end.setPrev(start);
-            end.setMoveLeft(i - end.getCost());
-            end.setActive(Node.Status.ENTERABLE);
-            end.setVisited(true);
-            return end;
+			end.setMoveLeft(i - end.getCost(this));
         }
         else
         if (end.IsPassable(this, start) && testViability(start, end, i))
         {
             end.setPrev(start);
             end.setActive(Node.Status.PASSABLE);
-            end.setMoveLeft(i - end.getCost());
+			end.setMoveLeft(i - end.getCost(this));
             end.setVisited(true);
             return end;
         }
@@ -129,7 +68,7 @@ public class Algorithm{
 
 	public bool testViability(Node start, Node end, int i)
 	{
-		return end.getCost () <= i && end.getMoveLeft() < i - end.getCost();
+		return end.getCost (this) <= i && end.getMoveLeft() < i - end.getCost(this);
 	}
 
 	public List<UNode> GenerateRoute(Node start, Node end)
@@ -145,7 +84,7 @@ public class Algorithm{
 			testedNode = testedNode.getPrev();
 		}while (testedNode != null);
 		trasa.Reverse ();
-		trasa.RemoveAt(0);
+		//trasa.RemoveAt (0);
 		return trasa;
 
 	}
@@ -164,7 +103,7 @@ public class Algorithm{
 	public void SetStarting(Node selected, int i)
 	{
 		selected.setVisited (true);
-        selected.setActive(Node.Status.NOTHING);
+        selected.setActive(Node.Status.ENTERABLE);
 		selected.setPrev (null);
 		selected.setMoveLeft (i);
 	}
@@ -204,4 +143,25 @@ public class Algorithm{
             nod.setActive(Node.Status.ENTERABLE);
         }
     }
+	public void addMovementModifier(Modifier mod)
+	{
+		MovementModifiers.Add (mod);
+	}
+	public void removeMovementModifier(Modifier mod)
+	{
+		MovementModifiers.Remove (mod);
+	}
+	public int checkForMovementModifier(TerrainType type)
+	{
+		int modifier = -1;
+		foreach(Modifier mod in MovementModifiers)
+		{
+			if((mod.terrainType & type) == mod.terrainType)
+			{
+				if(modifier < mod.modifiedSpeed)
+					modifier = mod.modifiedSpeed;
+			}
+		}
+		return modifier;
+	}
 }

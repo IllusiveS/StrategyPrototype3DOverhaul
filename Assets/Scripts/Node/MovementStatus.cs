@@ -7,15 +7,16 @@ public class MovementStatus : MonoBehaviour {
 	public Sprite endMovement;
     public Sprite route;
 	public Sprite attack;
+	public Sprite pass;
 
-	private SpriteRenderer renderer;
+	private SpriteRenderer rendererR;
 
-    private Node node;
+	private Node node;
 
-	// Use this for initialization
+	// UrendererRfor initialization
 	void Start () {
         node = GetComponentInParent<UNode>().node;
-		renderer = GetComponent<SpriteRenderer> ();
+		rendererR = GetComponent<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
@@ -29,7 +30,7 @@ public class MovementStatus : MonoBehaviour {
                 setMovement();
                 break;
             case Node.Status.PASSABLE:
-                setMovement();
+                setPassable();
                 break;
             case Node.Status.FINAL:
                 setEndMovement();
@@ -45,27 +46,32 @@ public class MovementStatus : MonoBehaviour {
 
 	public void setMovement()
 	{
-		renderer.enabled = true;
-		renderer.sprite = possibleMovement;
+		rendererR.enabled = true;
+		rendererR.sprite = possibleMovement;
 	}
 	public void setEndMovement()
 	{
-		renderer.enabled = true;
-		renderer.sprite = endMovement;
+		rendererR.enabled = true;
+		rendererR.sprite = endMovement;
 	}
     public void setRoute()
     {
-        renderer.enabled = true;
-        renderer.sprite = route;
+        rendererR.enabled = true;
+        rendererR.sprite = route;
     }
 	public void setAttack()
 	{
-		renderer.enabled = true;
-		renderer.sprite = attack;
+		rendererR.enabled = true;
+		rendererR.sprite = attack;
 	}
 	public void reset()
 	{
-		renderer.enabled = false;
+		rendererR.enabled = false;
 	}
 
+	void setPassable ()
+	{
+		rendererR.enabled = true;
+		rendererR.sprite = pass;
+	}
 }

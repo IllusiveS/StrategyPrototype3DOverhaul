@@ -103,7 +103,7 @@ public class UCombatUnitModule : MonoBehaviour, ITurnObserver {
 	public void checkPossibleAttacks()
 	{
 		UCombat.getSingleton ().Notify (5);
-		UCombat.getSingleton ().checkAttackable (this);
+		//UCombat.getSingleton ().checkAttackable (this);
 	}
 
 	void OnDestroy()

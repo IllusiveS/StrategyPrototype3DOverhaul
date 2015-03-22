@@ -3,10 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class UCombatStart : MonoBehaviour, ITurnSubject {
-
-	public Transform transformCreateAttackers;
-	public Transform transformCreateDefenders;
-
 	public UArmy Attackers;
 	public UArmy Defenders;
 
@@ -17,75 +13,22 @@ public class UCombatStart : MonoBehaviour, ITurnSubject {
 
 	// Use this for initialization
 	void Start () {
-
-	}
-	
-	// Update is called once per frame
-	void setDisplay () {
-		List<Unit> attackingUnits = Attackers.army.getUnits ();
-		List<Unit> defendingUnits = Defenders.army.getUnits ();
-
-		for(int i = 0; i < attackingUnits.Count; i++)
-		{
-			UUnit un = attackingUnits[i].unityUnit;
-			un.transform.position = new Vector3 (transformCreateAttackers.position.x, transformCreateAttackers.position.y - (offset * i), transformCreateAttackers.position.z);
-		
-			un.gameObject.GetComponent<SpriteRenderer> ().sortingOrder = - i * 3;
-			un.gameObject.transform.FindChild("UnitDisplay").GetComponent<SpriteRenderer>().sortingOrder = - (i * 3) - 1;
-
-			un.GetComponent<UCombatStartUnitModule>().place = new Vector3 (un.transform.position.x, un.transform.position.y, un.transform.position.z);
-		}
-		for(int i = 0; i < defendingUnits.Count; i++)
-		{
-			UUnit un =  defendingUnits[i].unityUnit;
-			un.transform.position = new Vector3 (transformCreateDefenders.position.x, transformCreateDefenders.position.y - (offset * i), transformCreateDefenders.position.z);
-		
-			un.gameObject.GetComponent<SpriteRenderer> ().sortingOrder = - i * 3;
-			un.gameObject.transform.FindChild("UnitDisplay").GetComponent<SpriteRenderer>().sortingOrder = - (i * 3) - 1;
-
-			un.GetComponent<UCombatStartUnitModule>().place = new Vector3 (un.transform.position.x, un.transform.position.y, un.transform.position.z);
-		}
+        foreach(FormationDropper drop in GetComponentsInChildren<FormationDropper>())
+        {
+            drop.setCombatController(this);
+        }
 	}
 
-	public void setUp(UArmy attackers, UArmy defenders)
+	public void setUp(UArmy attackers, UArmy defenders, List<ITurnObserver> units)
 	{
 		Attackers = attackers;
 		Defenders = defenders;
 
-		prepareDisplay ();
-		setDisplay ();
-		foreach(SpaceForUnitCreation crea in GetComponentsInChildren<SpaceForUnitCreation>())
-		{
-			crea.setUp();
-		}
-		Notify (Attackers.army.getUnits () [0].getPlayer ());
-
+		this.units = units;
+        
 		currentPlayer = attackers.army.getPlayer ();
-	}
 
-	void prepareDisplay()
-	{
-		List<Unit> attackingUnits = Attackers.army.getUnits ();
-		List<Unit> defendingUnits = Defenders.army.getUnits ();
-		
-		for(int i = 0; i < attackingUnits.Count; i++)
-		{
-			UUnit un = attackingUnits[i].unityUnit;
-			UCombatStartUnitModule module = un.gameObject.AddComponent<UCombatStartUnitModule>();
-
-			module.combatStart = this;
-			Attach (module);
-			
-			//displayAttackers[i].unitToDisplay = Attackers.army.getUnits()[i].unityUnit;
-		}
-		for(int i = 0; i < defendingUnits.Count; i++)
-		{
-			UUnit un =  defendingUnits[i].unityUnit;
-			UCombatStartUnitModule module = un.gameObject.AddComponent<UCombatStartUnitModule>();
-
-			module.combatStart = this;
-			Attach (module);
-		}
+        Notify(currentPlayer);
 	}
 
 	public void PlaceUnit()
@@ -111,7 +54,7 @@ public class UCombatStart : MonoBehaviour, ITurnSubject {
 
 	bool otherPlayerPlacedAll()
 	{
-		List<UCombatStartUnitModule> lista = new List<UCombatStartUnitModule> ();
+		List<UnitCombat> lista = new List<UnitCombat> ();
 
 		UArmy otherArmy;
 
@@ -126,14 +69,14 @@ public class UCombatStart : MonoBehaviour, ITurnSubject {
 
 		foreach(Unit un in otherArmy.army.getUnits())
 		{
-			lista.Add(un.unityUnit.GetComponent<UCombatStartUnitModule>());
+			lista.Add(un.combatModule);
 		}
 
 		bool allPlaced = true;
 
-		foreach(UCombatStartUnitModule un in lista)
+		foreach(UnitCombat un in lista)
 		{
-			if (un.isPlaced == false)
+			if (un.getXCoord() == -1 && un.getYCoord() == -1)
 				allPlaced = false;
 		}
 
@@ -142,22 +85,22 @@ public class UCombatStart : MonoBehaviour, ITurnSubject {
 
 	bool allUnitsArePlaced()
 	{
-		List<UCombatStartUnitModule> lista = new List<UCombatStartUnitModule> ();
+		List<UnitCombat> lista = new List<UnitCombat> ();
 
 		foreach(Unit un in Attackers.army.getUnits())
 		{
-			lista.Add(un.unityUnit.GetComponent<UCombatStartUnitModule>());
+			lista.Add(un.combatModule);
 		}
 		foreach(Unit un in Defenders.army.getUnits())
 		{
-			lista.Add(un.unityUnit.GetComponent<UCombatStartUnitModule>());
+			lista.Add(un.combatModule);
 		}
 		
 		bool allPlaced = true;
 		
-		foreach(UCombatStartUnitModule un in lista)
+		foreach(UnitCombat un in lista)
 		{
-			if (un.isPlaced == false)
+			if (un.getXCoord() == -1 && un.getYCoord() == -1)
 				allPlaced = false;
 		}
 		
@@ -166,26 +109,11 @@ public class UCombatStart : MonoBehaviour, ITurnSubject {
 
 	void startCombat()
 	{
-		List<UCombatStartUnitModule> lista = new List<UCombatStartUnitModule> ();
-		
-		foreach(Unit un in Attackers.army.getUnits())
+		foreach(ArmyDisplayer disp in GetComponentsInChildren<ArmyDisplayer>())
 		{
-			lista.Add(un.unityUnit.GetComponent<UCombatStartUnitModule>());
-		}
-		foreach(Unit un in Defenders.army.getUnits())
-		{
-			lista.Add(un.unityUnit.GetComponent<UCombatStartUnitModule>());
+			Destroy(disp.gameObject);
 		}
 
-		foreach(UCombatStartUnitModule un in lista)
-		{
-			Destroy(un);
-			un.gameObject.AddComponent <UCombatUnitModule>();
-		}
-		foreach(SpaceForUnitCreation crea in GetComponentsInChildren<SpaceForUnitCreation>())
-		{
-			crea.removeSpaces();
-		}
 		UCombat.getSingleton ().startCombat ();
 	}
 

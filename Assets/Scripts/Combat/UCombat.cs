@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Zenject;
 
 public class UCombat : MonoBehaviour, ITurnSubject {
+
+	[Inject]
+	GameControl control;
 
 	public Sprite selectableSprite;
 	public Sprite attackableSprite;
@@ -31,15 +35,8 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 	// Use this for initialization
 	void Start () {
 		singleton = this;
-
-
-		start = GetComponent<UCombatStart> ();
-		start.setUp (Attackers, Defenders);
-
-		currentPlayer = Attackers.army.getPlayer ();
-		
-		setUpCombat (Attackers.army, Defenders.army);
-
+		GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceCamera;
+		gainPointsDelegate += DeclareWinner;
 	}
 
 	// Update is called once per frame
@@ -49,6 +46,8 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 
 	public void setUpCombat(Army atk, Army def)
 	{
+		start = GetComponent<UCombatStart> ();
+
 		Combat com = new Combat ();
 		combat = com;
 		situation = com;
@@ -56,10 +55,51 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 
 		Attackers = atk.getUArmy ();
 		Defenders = def.getUArmy ();
+
+		currentPlayer = Attackers.army.getPlayer ();
+
+		ArmyDisplayer[] displayers = GetComponentsInChildren<ArmyDisplayer> ();
+		
+		displayers [0].armyToDisplay = Attackers;
+		displayers [1].armyToDisplay = Defenders;
+		
+		FormationOwner[] formations = GetComponentsInChildren<FormationOwner> ();
+		
+		formations [1].playerOwner = Attackers.army.getPlayer ();
+		formations [0].playerOwner = Defenders.army.getPlayer ();
+
+		foreach(Unit un in Attackers.army.getUnits())
+		{
+            un.combatModule.setXCoord(-1);
+            un.combatModule.setYCoord(-1);
+			Attach(un.combatModule);
+		}
+		foreach(Unit un in Defenders.army.getUnits())
+		{
+            un.combatModule.setXCoord(-1);
+            un.combatModule.setYCoord(-1);
+			Attach(un.combatModule);
+		}
+		start.setUp (Attackers, Defenders, units);
+
+		DisplayPointsFill[] fills = GetComponentsInChildren<DisplayPointsFill> ();
+		fills [0].displayArmyPoints (Attackers.army);
+		fills [1].displayArmyPoints (Defenders.army);
+
+		DisplayPointsNumber[] numbers = GetComponentsInChildren<DisplayPointsNumber> ();
+		numbers [0].displayArmyInfo(Attackers.army);
+		numbers [1].displayArmyInfo(Defenders.army);
+
+		atk.Player.OnCombatBegin.Invoke (this, atk, def);
+		def.Player.OnCombatBegin.Invoke (this, atk, def);
 	}
 
 	public void startCombat()
 	{
+		foreach(FormationPosition disp in GetComponentsInChildren<FormationPosition>())
+        {
+            disp.gameObject.AddComponent<CUnitCombat>();
+        }
 		Notify (currentPlayer);
 	}
 
@@ -82,47 +122,25 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 			obs.Update (turn);
 		}
 	}
-	public void checkAttackable(UCombatUnitModule attacker)
+	public void checkAttackable(UnitCombat attacker)
 	{
-		UArmy armyToCheck;
-		try
+		List<UnitCombat> unitsInFight = new List<UnitCombat> ();
+
+		foreach(Unit un in Attackers.army.getUnits())
 		{
-			if(attacker.GetComponent<UUnit>().unit.getPlayer() == Attackers.army.getPlayer())
-			{
-				armyToCheck = Defenders;
-			}
-			else
-			{
-				armyToCheck = Attackers;
-			}
+			unitsInFight.Add(un.combatModule);
 		}
-		catch(System.NullReferenceException)
+		foreach(Unit un in Defenders.army.getUnits())
 		{
-			if(UCombatUnitModule.selected.GetComponent<UUnit>().unit.getPlayer() == Attackers.army.getPlayer())
-			{
-				armyToCheck = Defenders;
-			}
-			else
-			{
-				armyToCheck = Attackers;
-			}
+			unitsInFight.Add(un.combatModule);
 		}
 
-		foreach(Unit un in armyToCheck.army.getUnits())
+		foreach(UnitCombat un in unitsInFight)
 		{
-			try
-			{
-				if(attacker.GetComponent<UUnit>().unit.canAttack(un.combatModule))
-				{
-					un.unityUnit.GetComponent<UCombatUnitModule>().attackable = true;
-					un.unityUnit.GetComponent<UCombatUnitModule>().selectableView.UpdateDisplay();
-				}
-			}
-			catch(System.NullReferenceException)
-			{
-				un.unityUnit.GetComponent<UCombatUnitModule>().attackable = false;
-				un.unityUnit.GetComponent<UCombatUnitModule>().selectableView.UpdateDisplay();
-			}
+			if(CUnitCombat.selected.canAttack(un))
+				un.setIsAttackable(true);
+			else
+				un.setIsAttackable(false);
 		}
 	}
 
@@ -162,10 +180,8 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 		bool allMoved = true;
 		foreach(Unit un in nextPlayer.army.getUnits())
 		{
-			if(!un.unityUnit.GetComponent<UCombatUnitModule>().used)
-			{
+			if (un.combatModule.getAttacks() > 0)
 				allMoved = false;
-			}
 		}
 		return allMoved;
 	}
@@ -185,10 +201,8 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 		}
 		foreach(UUnit un in units)
 		{
-			if(!un.GetComponent<UCombatUnitModule>().used)
-			{
+			if (un.unit.combatModule.getAttacks() > 0)
 				allMoved = false;
-			}
 		}
 
 		return allMoved;
@@ -217,6 +231,9 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 		int attackerGlory = 0;
 		int defenderGlory = 0;
 
+		Attackers.army.Player.OnCombatEnd.Invoke (this, Attackers.army, Defenders.army);
+		Defenders.army.Player.OnCombatEnd.Invoke (this, Attackers.army, Defenders.army);
+
 		foreach(Unit un in Attackers.army.getUnits())
 		{
 			attackerGlory += un.getGlory();
@@ -229,26 +246,11 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 
 		if(attackerGlory > defenderGlory)
 		{
-			DeclareWinner(Attackers, attackerGlory - defenderGlory);
+			DeclareWinner(Attackers, Defenders, attackerGlory - defenderGlory);
 		}
 		else
 		{
-			DeclareWinner(Defenders, defenderGlory - attackerGlory);
-		}
-
-
-		foreach(Unit un in Attackers.army.getUnits())
-		{
-			Destroy(un.unityUnit.GetComponent<UCombatUnitModule>());
-			un.unityUnit.transform.position = new Vector3(900, 990, 900);
-			un.unityUnit.GetComponent<SpriteRenderer>().sprite = un.sprite;
-		}
-		
-		foreach(Unit un in Defenders.army.getUnits())
-		{
-			Destroy(un.unityUnit.GetComponent<UCombatUnitModule>());
-			un.unityUnit.transform.position = new Vector3(900, 990, 900);
-			un.unityUnit.GetComponent<SpriteRenderer>().sprite = un.sprite;
+			DeclareWinner(Defenders, Attackers, defenderGlory - attackerGlory);
 		}
 
 		if (Attackers.army.getUnits().Count == 0)
@@ -263,9 +265,37 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 		Destroy (gameObject);
 	}
 
-	public void DeclareWinner(UArmy winner, int points)
+	public Army getWinningSide()
 	{
-		Player.getPlayer (winner.army.getPlayer ()).Glory += points + 1;
+		int attackerGlory = 0;
+		int defenderGlory = 0;
+
+		foreach(Unit un in Attackers.army.getUnits())
+		{
+			attackerGlory += un.getGlory();
+		}
+		
+		foreach(Unit un in Defenders.army.getUnits())
+		{
+			defenderGlory += un.getGlory();
+		}
+		
+		if(attackerGlory > defenderGlory)
+		{
+			return Attackers.army;
+		}
+		else
+			return Defenders.army;
+	}
+
+	public delegate void gainPoints(UArmy winner, UArmy loser, int points);
+
+	public gainPoints gainPointsDelegate = null;
+
+	protected void DeclareWinner(UArmy winner, UArmy loser, int points)
+	{
+		winner.army.Player.addPoints (winner.army.getGlory () - loser.army.getGlory (), "Battle glory");
+		winner.army.Player.addPoints (2, "Battle victory");
 	}
 
 	public void CheckDeaths()
@@ -286,28 +316,28 @@ public class UCombat : MonoBehaviour, ITurnSubject {
 		{
 			if (un.unit.Die())
 			{
-				UCombat.getSingleton().Detach(un.GetComponent<UCombatUnitModule>());
-				un.unit.owner.army.getUnits().Remove(un.unit);
+				UCombat.getSingleton().Detach(un.unit.combatModule);
+				un.unit.owner.army.removeUnit(un.unit);
 				Destroy(un.gameObject);
 			}
-			un.GetComponent<UCombatUnitModule>().attackable = false;
+			//un.GetComponent<UCombatUnitModule>().attackable = false;
 		}
 	}
-
-	void OnGUI()
+	public int getGlory()
 	{
-		string str;
-		if(Attackers.army.getGlory() > Defenders.army.getGlory())
-		{
-			str = Attackers.army.getGlory().ToString() + " <<<< " + Defenders.army.getGlory();
-		}
-		else
-		{
-			str = Attackers.army.getGlory().ToString() + " >>>> " + Defenders.army.getGlory();
-		}
-		GUI.Label(new Rect(Screen.height/15*13, Screen.height/15*14, Screen.width/7*3, Screen.width/7*3), str);
-	}
+		int glory = 0;
 
+		foreach(Unit un in Attackers.army.getUnits())
+		{
+			glory += un.getGlory();
+		}
+		foreach(Unit un in Defenders.army.getUnits())
+		{
+			glory += un.getGlory();
+		}
+
+		return glory;
+	}
 	void OnDestroy()
 	{
 		singleton = null;

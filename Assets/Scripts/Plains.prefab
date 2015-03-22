@@ -100,12 +100,32 @@ MonoBehaviour:
   halfSize: .5
   neighbours: []
   node:
+    nodeClass: 
     node: {fileID: 0}
+    nodeSpecial: {fileID: 0}
+    army:
+      uArmy: {fileID: 0}
+      units: []
+      isActive: 0
+      isItsTurn: 0
+      canAttack: 1
+      iMoveMax: 0
+      iPlayerOwner: 0
+      movingAlgorithm:
+        armyOwner: {fileID: 0}
+        MovementModifiers: []
+      zocModule:
+        range: 0
     NeighboursNumber: 0
     bWasVisited: 0
     bIsActivated: 0
     iCost: 2
     iMoveLeft: 0
+    Neighbours: []
+    nodeStatus: 5
+    terrainType: 0
+    zoneOfControl:
+      influencedBy: []
   AllNodes: 0
   army: {fileID: 0}
   cost: 2
@@ -121,6 +141,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c1d9b412d9dd2e469fbc2b35bfce3c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  node:
+    nodeClass: 
+    node: {fileID: 0}
+    nodeSpecial: {fileID: 0}
+    army:
+      uArmy: {fileID: 0}
+      units: []
+      isActive: 0
+      isItsTurn: 0
+      canAttack: 1
+      iMoveMax: 0
+      iPlayerOwner: 0
+      movingAlgorithm:
+        armyOwner: {fileID: 0}
+        MovementModifiers: []
+      zocModule:
+        range: 0
+    NeighboursNumber: 0
+    bWasVisited: 0
+    bIsActivated: 0
+    iCost: 0
+    iMoveLeft: 0
+    Neighbours: []
+    nodeStatus: 5
+    terrainType: 0
+    zoneOfControl:
+      influencedBy: []
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
