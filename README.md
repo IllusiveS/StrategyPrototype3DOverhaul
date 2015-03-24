@@ -7,6 +7,7 @@ Along the line i started toying with delegates events and dependency injection a
 
 So now im done with this project, i was able to change it to 3d with no problem whatsoever so i consider it a success
 
+Done in unity and c#
 
 I used 
 Advanced Inspector  https://www.assetstore.unity3d.com/en/#!/content/18025
